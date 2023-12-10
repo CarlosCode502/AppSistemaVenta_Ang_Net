@@ -85,6 +85,11 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
     MatDatepickerModule,
     MatNativeDateModule,
     MomentDateModule
+  ],
+  //Especificando 2 modulos en especial min 11.08 parte 8
+  providers:[
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class SharedModule {
