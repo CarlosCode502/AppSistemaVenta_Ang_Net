@@ -4,23 +4,39 @@
 
 <!-- Para especificar un nav con color primario min 02.49 parte 9 -->
 <mat-toolbar color="primary">
-    <!-- Crea una fila en el nav -->
-    <mat-toolbar-row>
-        <!-- Titulo del nav-->
-        <h1>Sistema de Venta</h1>
+  <!-- Crea una fila en el nav -->
+  <mat-toolbar-row>
+    <!-- Titulo del nav-->
+    <h1>Sistema de Venta</h1>
 
-        <!-- Botón para ocultar el nav -->
-        <button mat-icon-button>
-            <mat-icon>menu</mat-icon>
-        </button>
-
-    </mat-toolbar-row>
+    <!-- Botón para ocultar/mostrar el nav (evento clic que apunta al nav de 04.17) -->
+    <button mat-icon-button (click)="sidenav.toggle();">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <!-- Creando menú lateral min 04.17 parte 9 -->
 <!-- Contenedor del nav -->
 <mat-sidenav-container>
-<mat-sidenav>
+    <!-- Barra lateral (contiene id, esta abierto, modo y tamaño) -->
+  <mat-sidenav #sidenav opened="true" mode="side" style="width: 200px;">
+    <!-- Listado -->
+    <mat-nav-list>
+        <!-- Elementos -->
+        <mat-list-item >
+            <mat-icon mat-list-icon>dashboard</mat-icon>
+            <div mat-line>DashBoard</div>
+        </mat-list-item>        
+    </mat-nav-list>
+
     
-</mat-sidenav>
+  </mat-sidenav>
+  <!-- Se debe crear el contenido para mostrar el sidenav min 07.37 parte 9 -->
+  <!-- El contenido para renderizar nuestras páginas -->
+    <mat-sidenav-content>
+        <div style="height: 90vh;">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
 </mat-sidenav-container>
