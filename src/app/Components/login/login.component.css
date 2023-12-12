@@ -8,18 +8,27 @@
   background-color: #f5f5f5;
 }
 
+/* Para crear un cuadro o contenedor donde se muestren los controles min 40.49 parte 9 */
 .loginCard {
   /* Maximo de ancho */
-  max-width: 300px !important;
+  max-width: 400px !important;
   margin: 2em auto;
   text-align: center;
   max-height: 600px;
 }
 
+/* Titulo de la tarjeta con nombre de login */
 .header {
   text-align: center;
+  margin-top: 1em;
 }
 
+/* Los componentes que tengan esta clase tendran un ancho de 80% */
 .full-width {
   width: 80%;
+}
+
+/* Para agregar un espcacio bajo el control */
+.btn-pddBtn {
+  margin-bottom: 1em;
 }
