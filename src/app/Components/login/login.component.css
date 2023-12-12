@@ -1,0 +1,25 @@
+/* Agregando diseño al login min 39.53 parte 9 */
+/* Para centrar y ajustar los elementos */
+.body {
+  display: flex;
+  justify-content: center;
+  height: 100%; /*Alto*/
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.loginCard {
+  /* Maximo de ancho */
+  max-width: 300px !important;
+  margin: 2em auto;
+  text-align: center;
+  max-height: 600px;
+}
+
+.header {
+  text-align: center;
+}
+
+.full-width {
+  width: 80%;
+}

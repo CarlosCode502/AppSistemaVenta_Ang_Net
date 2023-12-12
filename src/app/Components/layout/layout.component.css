@@ -1,0 +1,8 @@
+/* Para solucionar el bug de que el icono se ponía sobre el texto min 11.40 parte 9 */
+/* Esto se debe a un error del componente angular material a la version 16.2 */
+#sameLine {
+  display: flex; /*Indica que se usará flexbox*/
+  justify-content: space-between; /*Los elementos se moveran a la izquierda y derecha*/
+  align-items: center; /*Alineamos de manera vertical*/
+  /* padding: 6px; */
+}

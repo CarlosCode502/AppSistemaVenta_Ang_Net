@@ -1,2 +1,77 @@
 <!-- Creado junto con (.css, .spec.ts, .ts) min 13.22 parte 8-->
-<p>login works!</p>
+
+<!-- Contendrá toda la estructura de nuestro login min 27.30 parte 9 -->
+<div class="body">
+  <mat-card class="loginCard">
+    <div class="header">
+      <h2>Login</h2>
+    </div>
+
+    <mat-card-content style="padding-bottom: 15px">
+      <!-- 
+        Esta etiqueta va a ser igual o corresponder a la var creada en (min 19.56 parte 9) 
+    ngSubmit va a corresponder al envento(iniciarSesion) que va a reaccionar al presionar 
+    el btn ingresar-->
+      <form [formGroup]="formularioLogin" (ngSubmit)="iniciarSesion()">
+        <!-- Etiqueta de angular-material (apariencia)-->
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Email</mat-label>
+          <!-- Este input va a hacer referencia a donde se valida el campo del gmail del (min 21.47 parte 9) min 31.15 parte 9 -->
+          <input formControlName="email" matInput autocomplete="off" />
+          <!-- ICono -->
+          <mat-icon matSuffix>mail</mat-icon>
+        </mat-form-field>
+
+        <!-- Etiqueta de angular-material (apariencia)-->
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <!-- Configuracion para ocultar contraseña (si ocultar pass sea = true ocultar sino = texto) min 32.18 parte 9 -->
+          <!-- Este input va a hacer referencia a donde se valida el campo del gmail del (min 21.47 parte 9) min 31.15 parte 9 -->
+          <input
+            [type]="ocultarPassword ? 'password' : 'text'"
+            formControlName="password"
+            matInput
+            autocomplete="off"
+          />
+
+          <!-- Botón que oculta/muestra password al presionar ejecuta el método ocultar password min 33.41 -->
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="ocultarPassword = !ocultarPassword"
+            type="button"
+          >
+            <!-- Si ocultar password esta activado ocultar contraseña si no esta activo ocultar contraseña -->
+            <mat-icon matSuffix>
+              {{ ocultarPassword ? "visibility_off" : "visibility" }}
+            </mat-icon>
+          </button>
+        </mat-form-field>
+
+        <!-- Si algun campo del formulario de login no esta completo entonces desabilitará este botón hasta que sea valido
+          min 36.03 parte 9 -->
+        <button
+          class="full-width"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="formularioLogin.invalid"
+        >
+          Ingresar
+          <!-- Icono -->
+          <mat-icon matSuffix>login</mat-icon>
+        </button>
+        <!-- Fin de formulario de ingreso min 36.58 parte 9 -->
+      </form>
+    </mat-card-content>
+    <!-- Trabajando en el icono de carga min 37.30 parte 9 -->
+    <mat-card-footer>
+      <!-- Una barra de progreso de tipo indeterminado -->
+      <!-- *nIf significa mostrar esta etiqueta cuando mostrarLoading sea true sino no -->
+      <mat-progress-bar
+        mode="indeterminate"
+        *ngIf="mostrarLoading"
+      ></mat-progress-bar>
+    </mat-card-footer>
+  </mat-card>
+</div>

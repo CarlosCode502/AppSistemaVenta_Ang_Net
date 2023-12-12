@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 
-//Se importa automáticamente al especificar las pag hijas min 20.45 parte 8 
+//Se importa automáticamente al especificar las pag hijas min 20.45 parte 8
 import { DashBoardComponent } from './Pages/dash-board/dash-board.component';
 import { UsuarioComponent } from './Pages/usuario/usuario.component';
 import { ProductoComponent } from './Pages/producto/producto.component';
@@ -14,24 +14,26 @@ import { HistorialVentaComponent } from './Pages/historial-venta/historial-venta
 import { ReporteComponent } from './Pages/reporte/reporte.component';
 
 //Configurando las rutas (ruteos) min 20.04 parte 8
-const routes: Routes = [{
-  path:'', //Si la ruta no tiene una url
-  component:LayoutComponent, //Cargar el componente
-  //Páginas hijas (cuando se reciba una url se carga el componente de nombre:)
-children:[
-  //Cuando en la ruta se escriba 'nombre' se apuntara al componente min 20.58 parte 8
-  {path:'dashboard', component:DashBoardComponent}, 
-  {path:'usuarios', component:UsuarioComponent},
-  {path:'productos', component:ProductoComponent},  
-  {path:'venta', component:VentaComponent},
-  {path:'historial', component:HistorialVentaComponent},
-  {path:'reporte', component:ReporteComponent}
-]
-}];
+const routes: Routes = [
+  {
+    path: '', //Si la ruta no tiene una url
+    component: LayoutComponent, //Cargar el componente
+    //Páginas hijas (cuando se reciba una url se carga el componente de nombre:)
+    children: [
+      //Cuando en la ruta se escriba 'nombre' se apuntara al componente min 20.58 parte 8
+      { path: 'dashboard', component: DashBoardComponent },
+      { path: 'usuarios', component: UsuarioComponent },
+      { path: 'productos', component: ProductoComponent },
+      { path: 'venta', component: VentaComponent },
+      { path: 'historial_venta', component: HistorialVentaComponent },
+      { path: 'reportes', component: ReporteComponent }, //mismo nombre que el de la interfaz
+    ],
+  },
+];
 
 @NgModule({
   //Verificando si los ha activado min 22.57 parte 8
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class LayoutRoutingModule { }
+export class LayoutRoutingModule {}

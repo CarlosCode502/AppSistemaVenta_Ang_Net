@@ -10,7 +10,7 @@
     <h1>Sistema de Venta</h1>
 
     <!-- Botón para ocultar/mostrar el nav (evento clic que apunta al nav de 04.17) -->
-    <button mat-icon-button (click)="sidenav.toggle();">
+    <button mat-icon-button (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
   </mat-toolbar-row>
@@ -19,24 +19,69 @@
 <!-- Creando menú lateral min 04.17 parte 9 -->
 <!-- Contenedor del nav -->
 <mat-sidenav-container>
-    <!-- Barra lateral (contiene id, esta abierto, modo y tamaño) -->
-  <mat-sidenav #sidenav opened="true" mode="side" style="width: 200px;">
+  <!-- Barra lateral (contiene id, esta abierto, modo y tamaño) min 6.47 parte 9 -->
+  <mat-sidenav #sidenav opened="true" mode="side" style="width: 200px">
     <!-- Listado -->
     <mat-nav-list>
-        <!-- Elementos -->
-        <mat-list-item >
-            <mat-icon mat-list-icon>dashboard</mat-icon>
-            <div mat-line>DashBoard</div>
-        </mat-list-item>        
-    </mat-nav-list>
+      <!-- Elementos -->
+      <mat-list-item routerLink="/pages/dashboard">
+        <!-- Se agrego un estilo css que coloca los elemetos en la mimsa linea
+        no un elemento sobre otro -->
+        <div id="sameLine">
+          <div matLine>DashBoard</div>
+          <mat-icon mat-list-icon>dashboard</mat-icon>
+        </div>
+      </mat-list-item>
 
-    
+      <!-- Elementos -->
+      <mat-list-item routerLink="/pages/usuarios">
+        <div id="sameLine">
+          <div matLine>Usuarios</div>
+          <mat-icon mat-list-icon>group</mat-icon>
+        </div>
+      </mat-list-item>
+
+      <!-- Elementos -->
+      <mat-list-item routerLink="/pages/productos">
+        <div id="sameLine">
+          <div matLine>Productos</div>
+          <mat-icon mat-list-icon>collections_bookmark</mat-icon>
+        </div>
+      </mat-list-item>
+
+      <!-- Elementos -->
+      <mat-list-item routerLink="/pages/venta">
+        <div id="sameLine">
+          <div matLine>Ventas</div>
+          <mat-icon mat-list-icon>currency_exchange</mat-icon>
+        </div>
+      </mat-list-item>
+
+      <!-- Elementos -->
+      <mat-list-item routerLink="/pages/historial_venta">
+        <div id="sameLine">
+          <div matLine>Historial</div>
+          <mat-icon mat-list-icon>edit_note</mat-icon>
+        </div>
+      </mat-list-item>
+
+      <!-- Elementos -->
+      <mat-list-item routerLink="/pages/reportes">
+        <div id="sameLine">
+          <div matLine>Reportes</div>
+          <mat-icon mat-list-icon>receipt</mat-icon>
+        </div>
+      </mat-list-item>
+      <!-- Fin de diseño de menu min 11.57 parte 9  -->
+    </mat-nav-list>
   </mat-sidenav>
   <!-- Se debe crear el contenido para mostrar el sidenav min 07.37 parte 9 -->
   <!-- El contenido para renderizar nuestras páginas -->
-    <mat-sidenav-content>
-        <div style="height: 90vh;">
-            <router-outlet></router-outlet>
-        </div>
-    </mat-sidenav-content>
+  <mat-sidenav-content>
+    <!-- El contenido que abarque el 90 de vertical hight min 08.32 parte 9-->
+    <div style="height: 90vh">
+      <!-- Para poder visualizar cada pág que tendrémos min 08.41 parte 9 -->
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
 </mat-sidenav-container>
