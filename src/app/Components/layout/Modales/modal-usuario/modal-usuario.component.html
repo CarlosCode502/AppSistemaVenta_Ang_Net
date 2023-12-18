@@ -1,2 +1,123 @@
 <!-- //Creado con Modales/modalUsuario en min 02.07 parte 10 -->
-<p>modal-usuario works!</p>
+<!-- Creando el html del modal usuarios min 22.09 parte 10 -->
+
+<!-- Titulo de la acción según sea el caso crear o editar-->
+<h2 matDialogTitle>{{ tituloAccion }} Usuario</h2>
+
+<!-- Contenido del modal o dialogo -->
+<mat-dialog-content>
+  <!-- Dentro ira el formulario (Recibe el grupo a través de FormGroup) min 23.09 parte 10-->
+  <!-- Ya esta relacionado a los campo creado en (min 08.12 parte 10) -->
+  <form [formGroup]="formularioUsuario">
+    <!-- Para poder ordenar columnas(1) y filas(de alto 80px)  -->
+    <mat-grid-list cols="1" rowHeight="80px">
+      <!-- Fila -->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Nombre Completo</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <input matInput autocomplete="off" formControlName="nombreCompleto" />
+          <!-- Icono -->
+          <mat-icon matSuffix>account-box</mat-icon>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila -->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Correo</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <input matInput autocomplete="off" formControlName="correo" />
+          <!-- Icono -->
+          <mat-icon matSuffix>mail</mat-icon>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila  min 26.20 parte 10-->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Rol</mat-label>
+
+          <!-- Un desplegable DropDownList -->
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <mat-select formControlName="idRol">
+            <!-- Opciones (ngFor para iterar cada elemento del arreglo = 0) -->
+            <!-- Por cada item dentro del arreglo se va a crear un elemento matoption -->
+            <!-- El valor va a ser idRol y el texto Nombre min 27.56 parte 10 -->
+            <mat-option *ngFor="let item of listaRoles" [value]="item.IdRol">
+              {{ item.Nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila para contraseña pegado min 28.57 parte 10 -->
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <!-- Configuracion para ocultar contraseña (si ocultar pass sea = true ocultar sino = texto) -->
+          <!-- Este input va a hacer referencia a donde se valida el campo del gmail -->
+          <!-- Se cambio el formControlName que corresponde al nombre del campo en modal usuario .ts min 29.25 parte 10 -->
+          <input
+            matInput
+            [type]="ocultarPassword ? 'password' : 'text'"
+            formControlName="clave"
+          />
+
+          <!-- Botón que oculta/muestra password al presionar ejecuta el método ocultar password min 29.45 parte 10-->
+          <!-- Cambia el estado de ocultar password de modal usuario -->
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="ocultarPassword = !ocultarPassword"
+            type="button"
+          >
+            <!-- Si ocultar password esta activado ocultar contraseña si no esta activo ocultar contraseña min 30.20 parte 10 -->
+            <mat-icon matSuffix>
+              {{ ocultarPassword ? "visibility_off" : "visibility" }}
+            </mat-icon>
+          </button>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila  min 30.52 parte 10-->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Estado</mat-label>
+          <!-- Un desplegable DropDownList -->
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <mat-select formControlName="esActivo">
+            <!-- Este no se compone de algo que deba iterar min 31.18 parte 10 -->
+            <!-- Se crean los elementos manualmente -->
+            <mat-option value="1">Activo</mat-option>
+            <mat-option value="0">Inactivo</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
+</mat-dialog-content>
+
+<!-- Creando los botones de acción min 32.10 parte 10 -->
+<!-- Para que se alinien al final -->
+<mat-dialog-actions align="end">
+  <!-- Cuando sea presionado va a cerrar este modal -->
+  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
+  <!-- Guardar o editar (va a tener la posibilidad de desabilitarse si los campos son invalidos) min 34.45 parte 10 -->
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="formularioUsuario.invalid"
+    (click)="(guardarEditar_Usuario)"
+  >
+    {{ botonAccion }}
+  </button>
+</mat-dialog-actions>
