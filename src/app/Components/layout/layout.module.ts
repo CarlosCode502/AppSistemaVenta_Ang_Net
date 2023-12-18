@@ -14,6 +14,7 @@ import { ReporteComponent } from './Pages/reporte/reporte.component';
 //Se importa automaticamente luego de importar shared module min 29.14 parte 8
 //Todo lo declarado en shared module se llama al layout principal
 import { SharedModule } from 'src/app/Reutilizable/shared/shared.module';
+import { ModalUsuarioComponent } from './Modales/modal-usuario/modal-usuario.component';
 
 //Este layout.module.ts solo va a pertenecer a la carpeta layout únicamente min 15.42 parte 8
 
@@ -25,7 +26,8 @@ import { SharedModule } from 'src/app/Reutilizable/shared/shared.module';
     ProductoComponent,
     VentaComponent,
     HistorialVentaComponent,
-    ReporteComponent
+    ReporteComponent,
+    ModalUsuarioComponent
   ],
   imports: [
     CommonModule,
