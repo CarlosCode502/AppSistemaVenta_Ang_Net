@@ -1,1 +1,16 @@
 /* //Creado con Modales/modalUsuario en min 02.07 parte 10 */
+/* Modificando la hoja de estilos min 35.08 parte 10 */
+
+/* Diseño de los controles o campos */
+mat-form-field {
+  /*Tamaño ancho de 100%*/
+  width: 100%;
+  /* Margen */
+  margin: 10px 10px;
+}
+
+/* La ventana del formulario min 35.56 parte 10 */
+form {
+  /* Tenga un ancho de */
+  width: 350px;
+}

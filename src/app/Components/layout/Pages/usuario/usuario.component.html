@@ -1,2 +1,28 @@
 <!-- Creando páginas y componentes a partir del min 16.50 parte 8 -->
-<p>usuario works!</p>
+<!-- Aquí va a estar todo el estilo que va a tener nuestro menú min 55.57 parte 10 -->
+<!-- Para esto se va a hacer uso de AngularMaterial -->
+<!-- Titulo de seccion -->
+<h1 style="margin: 20px 0px 0px 40px">Usuarios</h1>
+
+<!-- Tarjeta donde se mostrará la tabla de usuarios, botones y páginacion -->
+<mat-card style="margin: 20px 40px 40px 40px">
+  <!-- Titulo de la tarjeta -->
+  <mat-card-title>
+    <!-- Botón que permite abrir el modal para agregar un nuevo usuario 
+        Al momento de hacer click ejecuta el método dee usuario.component.ts de (min 46.39 parte 10)
+    -->
+    <button mat-raised-button color="primary" (click)="nuevoUsuario()">
+      <!-- Icono el botón y el texto -->
+      <mat-icon mat-list-icon>add</mat-icon>Nuevo Usuario
+    </button>
+  </mat-card-title>
+
+  <!-- Espacion divisor -->
+  <mat-divider></mat-divider>
+
+  <!-- Contenido de la tarjeta min 01.00.53 parte 10 -->
+  <mat-card-content class="dashboard-card-content">
+    <!-- Verificar ERROR AQUI -->
+    <mat-form-field> </mat-form-field>
+  </mat-card-content>
+</mat-card>
