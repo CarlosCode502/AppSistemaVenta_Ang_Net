@@ -7,10 +7,9 @@
 <!-- Tarjeta donde se mostrará la tabla de usuarios, botones y páginacion -->
 <mat-card style="margin: 20px 40px 40px 40px">
   <!-- Titulo de la tarjeta -->
-  <mat-card-title>
-    <!-- Botón que permite abrir el modal para agregar un nuevo usuario 
-        Al momento de hacer click ejecuta el método dee usuario.component.ts de (min 46.39 parte 10)
-    -->
+  <mat-card-title style="margin: 20px 0px 20px 20px">
+    <!-- Botón que permite abrir el modal para agregar un nuevo usuario
+        Al momento de hacer click ejecuta el método dee usuario.component.ts de (min 46.39 parte 10)-->
     <button mat-raised-button color="primary" (click)="nuevoUsuario()">
       <!-- Icono el botón y el texto -->
       <mat-icon mat-list-icon>add</mat-icon>Nuevo Usuario
@@ -22,7 +21,96 @@
 
   <!-- Contenido de la tarjeta min 01.00.53 parte 10 -->
   <mat-card-content class="dashboard-card-content">
-    <!-- Verificar ERROR AQUI -->
-    <mat-form-field> </mat-form-field>
+    <!-- Verificar appearance ERROR AQUI -->
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar</mat-label>
+      <!-- Campo que obtiene un filtro (id es #input) min 01.01.55 parte 10-->
+      <!--  lo ejecuta con KeyUp al moemto de soltar una tecla -->
+      <input matInput (keyup)="aplicarFiltroTabla($event)" #input />
+    </mat-form-field>
+
+    <!-- Componente para resaltar la tabla min 01.03.02 parte 10-->
+    <div class="mat-elevation-z2">
+      <!-- Tabla (obtiene la fuente de datos) -->
+      <table mat-table [dataSource]="dataListaUsuarios">
+        <!-- Columnas con nombre especifico especificadas en (min 38.46 parte 10)-->
+        <ng-container matColumnDef="nombreCompleto">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Nombre Completo</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            {{ element.nombreCompleto }}
+          </td>
+        </ng-container>
+
+        <!-- Columnas con nombre especifico especificadas en (min 38.46 parte 10)-->
+        <ng-container matColumnDef="correo">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Correo</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            {{ element.correo }}
+          </td>
+        </ng-container>
+
+        <!-- Columnas con nombre especifico especificadas en (min 38.46 parte 10)-->
+        <ng-container matColumnDef="rolDescripcion">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Rol</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            {{ element.rolDescripcion }}
+          </td>
+        </ng-container>
+
+        <!-- Columnas con nombre especifico especificadas en (min 38.46 parte 10)-->
+        <ng-container matColumnDef="estado">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            <!-- Condicion que cambie el color si es activo o no lo es min 01.06.44 parte 10 -->
+            {{ element.estado == 1 ? "Activo" : "Inactivo" }}
+          </td>
+        </ng-container>
+
+        <!-- Columna de acciones min 01.07.04 parte 10 -->
+        <!-- Columnas con nombre especifico especificadas en (min 38.46 parte 10)-->
+        <ng-container matColumnDef="acciones">
+          <!-- Encabezado de esta columna (no contendra texto) -->
+          <th mat-header-cell *matHeaderCellDef style="width: 80px"></th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            <!-- Agregamos los botones de las acciones min 01.07.37 parte 10 -->
+            <!-- Botón que contiene o ejecuta el método editar usuario recibe un (element = id usuario) -->
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="editarUsuario(element)"
+            >
+              <!-- Icono que no tiene texto -->
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <!-- Botón que ejecuta el métod eliminar usuario recibe un (element = id usuario) min 01.08.53 pt10 -->
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="eliminarUsuario(element)"
+            >
+              <!-- Icono que no tiene texto -->
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Tr para definir desde donde va a ser el diseño del origen de las cols de las tablas min 01.09.14 pt10  -->
+      </table>
+    </div>
   </mat-card-content>
 </mat-card>
