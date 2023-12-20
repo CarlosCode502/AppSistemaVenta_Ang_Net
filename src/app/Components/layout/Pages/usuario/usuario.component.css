@@ -1,1 +1,12 @@
 /* <!-- Creando páginas y componentes a partir del min 16.50 parte 8 --> */
+/* Agregando estilos de la vista de usuarios min 01.14.17 parte 10 */
+/* Ancho de tabla */
+table {
+  width: 100%;
+}
+
+/* Ancho de campos */
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}

@@ -110,7 +110,24 @@
         </ng-container>
 
         <!-- Tr para definir desde donde va a ser el diseño del origen de las cols de las tablas min 01.09.14 pt10  -->
+        <!-- Recibe el arreglo del (min 38.46 parte 10) -->
+        <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+        <!-- Va a iterar cada una de las filas de nuestra tabla o data -->
+        <tr mat-row *matRowDef="let row; columns: columnasTabla"></tr>
+
+        <!-- Fila para mostrar un dato en que la búsqueda por filtro no coincida min 01.10.35 parte 10 -->
+        <tr class="mat-row" *matNoDataRow>
+          <!-- Msj de error si no se encuentra nada (al final recibe el id del input del min 01.01.55 pt 10 ) -->
+          <td class="mat-cell" colspan="4">
+            No hay datos que coincidan con la búsqueda "{{ input.value }}"
+          </td>
+        </tr>
       </table>
+
+      <!-- Crear la páginacion de los datos usando paginator min 01.12.10 -->
+      <!-- [número de filas por páginacion] botones para regresar o sigiente en la paginacion-->
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+      </mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>
