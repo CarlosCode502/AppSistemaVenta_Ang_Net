@@ -83,7 +83,7 @@ export class ModalUsuarioComponent implements OnInit {
       next: (data) => {
         //Si la data corresponde a estatus se le asigna el value a listaRoles
         if (data.status) this.listaRoles = data.value;
-        console.log(this.listaRoles);
+        // console.log(this.listaRoles);
       },
       //En caso contrario se muestra un error
       error: (e) => {},
@@ -98,11 +98,11 @@ export class ModalUsuarioComponent implements OnInit {
     if (this.datosUsuario != null) {
       //Obtiene el valor asignado en al momento de ejecutarse este método
       this.formularioUsuario.patchValue({
-        nombreCompleto: this.datosUsuario.NombreCompleto,
-        correo: this.datosUsuario.Correo,
-        idRol: this.datosUsuario.IdRol,
-        clave: this.datosUsuario.Clave,
-        esActivo: this.datosUsuario.EsActivo.toString(),
+        nombreCompleto: this.datosUsuario.nombreCompleto,
+        correo: this.datosUsuario.correo,
+        idRol: this.datosUsuario.idRol,
+        clave: this.datosUsuario.clave,
+        esActivo: this.datosUsuario.esActivo.toString(),
       });
     }
   }
@@ -112,17 +112,17 @@ export class ModalUsuarioComponent implements OnInit {
     //Constante del tipo usuario que contiene todos los datos que recibe dicho modelo
     const _usuario: Usuario = {
       //Si el id usuario es nulo será sero sino va a ser el id del reg obtenido
-      IdUsuario: this.datosUsuario == null ? 0 : this.datosUsuario.IdUsuario,
+      idUsuario: this.datosUsuario == null ? 0 : this.datosUsuario.idUsuario,
       //Asigna el valor a la propiedad NC desde el formulario y el campo nombre completo
       //Propiedad: obtiene del formulario el valor del campo (igual para los demás)
-      NombreCompleto: this.formularioUsuario.value.nombreCompleto,
-      Correo: this.formularioUsuario.value.correo,
-      IdRol: this.formularioUsuario.value.idRol,
+      nombreCompleto: this.formularioUsuario.value.nombreCompleto,
+      correo: this.formularioUsuario.value.correo,
+      idRol: this.formularioUsuario.value.idRol,
       //No necesitamos asignar un roldesc por ahora
-      RolDescripcion: '',
-      Clave: this.formularioUsuario.value.clave,
+      rolDescripcion: '',
+      clave: this.formularioUsuario.value.clave,
       //Recibe un int y se manda un string (necesita conversion) min 17.14 parte 10
-      EsActivo: parseInt(this.formularioUsuario.value.esActivo),
+      esActivo: parseInt(this.formularioUsuario.value.esActivo),
     };
 
     //Válida para poder guardar el usuario editado min 17.53 parte 10

@@ -161,7 +161,7 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
       //Titulo del msj
       title: '¿Desea eliminar este usuario?',
       //Contenido sera el nombre del usuario
-      text: usuario.NombreCompleto,
+      text: usuario.nombreCompleto,
       //Icono de alerta
       icon: 'warning',
       //Color de btn
@@ -181,7 +181,7 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
         //Si resultado es afirmativo o confirmado
         if (resultado.isConfirmed) {
           //Se accede al usuario servicio y se ejecuta el método eliminar pasandole el idusuario obtenido aqui
-          this._usuarioServicio.Eliminar(usuario.IdUsuario).subscribe({
+          this._usuarioServicio.Eliminar(usuario.idUsuario).subscribe({
             //Lo siguiente es obtener la respuesta si el estatus es correcto
             next: (data) => {
               if (data.status) {

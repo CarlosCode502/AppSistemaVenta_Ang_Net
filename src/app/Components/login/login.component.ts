@@ -56,9 +56,9 @@ export class LoginComponent {
     //Modelo que se va a enviar a la api para la validación del login min 23.30 parte 9
     const request: Login = {
       //Recibe un correo del campo email (propiedad del modelo o comp login.ts (Interfaces))
-      Correo: this.formularioLogin.value.email,
+      correo: this.formularioLogin.value.email,
       //Recibe una clave del campo password (propiedad del modelo o comp login.ts (Interfaces))
-      Clave: this.formularioLogin.value.password,
+      clave: this.formularioLogin.value.password,
     };
 
     //Ejecuta este método iniciar con un rq (es necesario subscribirse para obtener la resp)
