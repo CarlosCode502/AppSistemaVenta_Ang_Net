@@ -82,9 +82,8 @@ export class ModalUsuarioComponent implements OnInit {
       //Obtiene o valida una respuesta
       next: (data) => {
         //Si la data corresponde a estatus se le asigna el value a listaRoles
-        if (data.status) {
-          this.listaRoles = data.value;
-        }
+        if (data.status) this.listaRoles = data.value;
+        console.log(this.listaRoles);
       },
       //En caso contrario se muestra un error
       error: (e) => {},

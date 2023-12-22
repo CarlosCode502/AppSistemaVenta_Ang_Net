@@ -24,7 +24,7 @@
         </mat-form-field>
       </mat-grid-tile>
 
-      <!-- Fila -->
+      <!-- Fila min 26.02 parte 10-->
       <mat-grid-tile>
         <!-- Campo del formulario con apariencia-->
         <mat-form-field appearance="outline">
@@ -37,22 +37,26 @@
         </mat-form-field>
       </mat-grid-tile>
 
-      <!-- Fila  min 26.20 parte 10-->
+      <!-- Fila min 26.20 parte 10-->
       <mat-grid-tile>
         <!-- Campo del formulario con apariencia-->
         <mat-form-field appearance="outline">
           <!-- Titulo del campo -->
           <mat-label>Rol</mat-label>
 
-          <!-- Un desplegable DropDownList -->
+          <!-- Un desplegable DropDownList min 26.37 parte 10-->
           <!-- El contnido que va a corresponder al campo de formControlName -->
           <mat-select formControlName="idRol">
             <!-- Opciones (ngFor para iterar cada elemento del arreglo = 0) -->
             <!-- Por cada item dentro del arreglo se va a crear un elemento matoption -->
             <!-- El valor va a ser idRol y el texto Nombre min 27.56 parte 10 -->
-            <mat-option *ngFor="let item of listaRoles" [value]="item.IdRol">
-              {{ item.Nombre }}
+            <mat-option *ngFor="let item of listaRoles" [value]="item.idRol">
+              {{ item.nombre }}
             </mat-option>
+
+            <!-- <mat-option value="1">Administrador</mat-option>
+            <mat-option value="2">Empleado</mat-option>
+            <mat-option value="3">Supervisor</mat-option> -->
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>

@@ -1,3 +1,4 @@
+//Creado junto con layout routing module en min 15.28 parte 8
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -27,13 +28,13 @@ import { ModalUsuarioComponent } from './Modales/modal-usuario/modal-usuario.com
     VentaComponent,
     HistorialVentaComponent,
     ReporteComponent,
-    ModalUsuarioComponent
+    ModalUsuarioComponent,
   ],
   imports: [
     CommonModule,
     LayoutRoutingModule,
     //Importar el modulo que contiene todos los componentes de diseño (interfaz) min 29.14 parte 8
-    SharedModule
-  ]
+    SharedModule,
+  ],
 })
-export class LayoutModule { }
+export class LayoutModule {}
