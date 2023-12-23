@@ -2,7 +2,7 @@
 <!-- Aquí va a estar todo el estilo que va a tener nuestro menú min 55.57 parte 10 -->
 <!-- Para esto se va a hacer uso de AngularMaterial -->
 <!-- Titulo de seccion -->
-<h1 style="margin: 20px 0px 0px 40px">Usuarios</h1>
+<h1 style="margin: 10px 0px 0px 40px; text-transform: uppercase">Usuarios</h1>
 
 <!-- Tarjeta donde se mostrará la tabla de usuarios, botones y páginacion -->
 <mat-card style="margin: 20px 40px 40px 40px">
@@ -20,10 +20,11 @@
   <mat-divider></mat-divider>
 
   <!-- Contenido de la tarjeta min 01.00.53 parte 10 -->
-  <mat-card-content class="dashboard-card-content">
+  <mat-card-content style="margin-top: 20px" class="dashboard-card-content">
     <!-- Verificar appearance ERROR AQUI -->
-    <mat-form-field appearance="outline">
-      <mat-label>Buscar</mat-label>
+    <!-- La clase busq contiene un estilo para que el control ocupe el 100% del contenedor -->
+    <mat-form-field class="busq" appearance="fill">
+      <mat-label>Buscar por:</mat-label>
       <!-- Campo que obtiene un filtro (id es #input) min 01.01.55 parte 10-->
       <!--  lo ejecuta con KeyUp al moemto de soltar una tecla -->
       <input matInput (keyup)="aplicarFiltroTabla($event)" #input />
@@ -73,9 +74,20 @@
           <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
           <!-- Mismo nombre que matColumnDef -->
           <td mat-cell *matCellDef="let element">
-            <!-- Condicion que cambie el color si es activo o no lo es min 01.06.44 parte 10 -->
-            {{ element.estado == 1 ? "Activo" : "Inactivo" }}
+            <!-- Condicion que cambie el color si es activo o no lo es min 01.06.44 parte 10  -->
+            {{ element.esActivo == 1 ? "Activo" : "Inactivo" }}
           </td>
+
+          <!-- <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{
+              'text-red': element.esActivo == '1',
+              'text-green': element.esActivo == '0'
+            }"
+          >
+            {{ element.esActivo == 1 ? "Activo" : "Inactivo" }}
+          </td> -->
         </ng-container>
 
         <!-- Columna de acciones min 01.07.04 parte 10 -->
@@ -126,7 +138,7 @@
 
       <!-- Crear la páginacion de los datos usando paginator min 01.12.10 -->
       <!-- [número de filas por páginacion] botones para regresar o sigiente en la paginacion-->
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+      <mat-paginator [pageSizeOptions]="[4, 8, 12]" showFirstLastButtons>
       </mat-paginator>
     </div>
   </mat-card-content>
