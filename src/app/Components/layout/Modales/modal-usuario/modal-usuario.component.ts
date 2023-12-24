@@ -111,7 +111,7 @@ export class ModalUsuarioComponent implements OnInit {
   guardarEditar_Usuario() {
     //Constante del tipo usuario que contiene todos los datos que recibe dicho modelo
     const _usuario: Usuario = {
-      //Si el id usuario es nulo será sero sino va a ser el id del reg obtenido
+      //Si el id usuario es nulo será cero sino va a ser el id del reg obtenido
       idUsuario: this.datosUsuario == null ? 0 : this.datosUsuario.idUsuario,
       //Asigna el valor a la propiedad NC desde el formulario y el campo nombre completo
       //Propiedad: obtiene del formulario el valor del campo (igual para los demás)
@@ -125,7 +125,7 @@ export class ModalUsuarioComponent implements OnInit {
       esActivo: parseInt(this.formularioUsuario.value.esActivo),
     };
 
-    //Válida para poder guardar el usuario editado min 17.53 parte 10
+    //Válida para poder guardar el usuario min 17.53 parte 10
     //Si es igual a nulo
     if (this.datosUsuario == null) {
       //Entonces se creará un nuevo usuario

@@ -1,0 +1,15 @@
+/* Creado modal-producto.c.css en min 01.15 parte 11 */
+
+/* Diseño de los controles o campos */
+mat-form-field {
+  /*Tamaño ancho de 100%*/
+  width: 100%;
+  /* Margen */
+  margin: 10px 10px;
+}
+
+/* La ventana del formulario min 19.08 parte 11 */
+form {
+  /* Tenga un ancho de */
+  width: 350px;
+}

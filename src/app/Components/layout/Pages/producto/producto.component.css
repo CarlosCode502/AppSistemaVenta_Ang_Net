@@ -1,0 +1,12 @@
+/* Agregando estilos de la vista de productos min 33.38 parte 11 */
+/* Ancho de tabla */
+table {
+  width: 100%;
+}
+
+/* Btn buscar */
+/* Ancho de campos min 01.14.40 parte 10*/
+.busq {
+  font-size: 14px;
+  width: 100%;
+}

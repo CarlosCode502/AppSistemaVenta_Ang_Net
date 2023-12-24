@@ -111,16 +111,11 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
     this.dataListaUsuarios.filter = filterValue.trim().toLocaleLowerCase();
   }
 
-  // //Método que cambia el color del texto si es activo o no
+  // // //Método que cambia el color del texto si es activo o no
   // cambiarColorTexto(event: Event) {
   //   //Obtiene el valor del filtro desde de un imput de tipo HTML
-  //   const text = (event.target as HTMLInputElement).textContent;
+  //   const textoValue = (event.target as HTMLInputElement).value;
 
-  //   if (text == 'Activo') {
-  //     return 'green';
-  //   } else {
-  //     return 'red';
-  //   }
   // }
 
   //Método para poder abrir el modal al momento en que el usuario haga clic en el btn crear min 46.39 parte 10

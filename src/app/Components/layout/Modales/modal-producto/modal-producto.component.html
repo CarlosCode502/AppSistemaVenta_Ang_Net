@@ -1,0 +1,128 @@
+<!-- Creado modal-producto.c.html en min 01.15 parte 11 -->
+<!-- Creando el html del modal productos min 14.18 parte 11 -->
+
+<!-- Titulo de la acción según sea el caso crear o editar-->
+<h2 matDialogTitle>{{ tituloAccion }} Producto</h2>
+
+<!-- Contenido del modal o dialogo -->
+<mat-dialog-content>
+  <!-- Dentro ira el formulario (Recibe el grupo a través de FormGroup) min 15.00 parte 11-->
+  <!-- Ya esta relacionado a los campo creado en (min 08.12 parte 10) -->
+  <form [formGroup]="formularioProducto">
+    <!-- Para poder ordenar columnas(1) y filas(de alto 80px)  -->
+    <mat-grid-list cols="1" rowHeight="80px">
+      <!-- Fila -->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Nombre Producto</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <input matInput autocomplete="off" formControlName="nombreProducto" />
+          <!-- Icono -->
+          <mat-icon matSuffix>fit_screen</mat-icon>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila min 15.27 parte 11-->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Categoria</mat-label>
+
+          <!-- Un desplegable DropDownList min 15.52 parte 11 -->
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <mat-select formControlName="idCategoria">
+            <!-- Opciones (ngFor para iterar cada elemento del arreglo = 0) -->
+            <!-- Por cada item dentro del arreglo se va a crear un elemento matoption -->
+            <!-- El valor va a ser idCat y el texto NombreCat min 16.15 parte 11 -->
+            <!-- item.nombreCategoria (contiene el texto de la categoria que corresponde al idcat) -->
+            <mat-option
+              *ngFor="let item of listaCategorias"
+              [value]="item.idCategoria"
+            >
+              {{ item.nombreCategoria }}
+            </mat-option>
+
+            <!-- <mat-option value="1">Administrador</mat-option>
+            <mat-option value="2">Empleado</mat-option>
+            <mat-option value="3">Supervisor</mat-option> -->
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila min 16.29 parte 11-->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Stock</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <!-- Se agrego un atributo más (type="number") min 16.58 parte 11 -->
+          <input
+            matInput
+            autocomplete="off"
+            formControlName="stock"
+            type="number"
+          />
+          <!-- Icono -->
+          <mat-icon matSuffix>edit_squea</mat-icon>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila min 17.32 parte 11-->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Precio</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <!-- Se agrego un atributo más (type="number") min 16.58 parte 11 -->
+          <input
+            matInput
+            autocomplete="off"
+            formControlName="precio"
+            type="number"
+          />
+          <!-- Icono -->
+          <mat-icon matSuffix>attach_money</mat-icon>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <!-- Fila min 17.51 parte 11-->
+      <mat-grid-tile>
+        <!-- Campo del formulario con apariencia-->
+        <mat-form-field appearance="outline">
+          <!-- Titulo del campo -->
+          <mat-label>Estado</mat-label>
+          <!-- Un desplegable DropDownList -->
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <mat-select formControlName="esActivo">
+            <!-- Este no se compone de algo que deba iterar min 31.18 parte 10 -->
+            <!-- Se crean los elementos manualmente -->
+            <mat-option value="1">Activo</mat-option>
+            <mat-option value="0">Inactivo</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
+</mat-dialog-content>
+
+<!-- Creando los botones de acción min 18.12 parte 11 -->
+<!-- Para que se alinien al final -->
+<mat-dialog-actions align="end">
+  <!-- Cuando sea presionado va a cerrar este modal -->
+  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
+  <!-- Guardar o editar (va a tener la posibilidad de desabilitarse si los campos son invalidos) min 18.20 parte 11  -->
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="formularioProducto.invalid"
+    (click)="guardarEditar_Producto()"
+  >
+    <!-- Va mostrar el texto de la acción que se esta realizando (guardar / editar)-->
+    {{ botonAccion }}
+  </button>
+</mat-dialog-actions>
