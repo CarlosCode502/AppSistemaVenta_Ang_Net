@@ -115,7 +115,9 @@ export class ModalProductoComponent implements OnInit {
       idCategoria: this.formularioProducto.value.idCategoria,
       //No necesitamos asignar un descCategoria por ahora
       descripcionCategoria: '',
-      precio: this.formularioProducto.value.precio,
+      //Se cambio a string (se evita el error bad request 400) BAD REQUEST
+      //The JSON value could not be converted to System.String. Path: $.precio
+      precio: this.formularioProducto.value.precio.toString(),
       stock: this.formularioProducto.value.stock,
       //Recibe un int y se manda un string (necesita conversion) min 12.01 parte 11
       esActivo: parseInt(this.formularioProducto.value.esActivo),
