@@ -22,7 +22,6 @@ import { DetalleVenta } from 'src/app/Interfaces/detalle-venta';
 
 //Agregando o utilizando SweetAlert2 (para mostrar alertas personalizadas) min 02.02 parte 12
 import Swal from 'sweetalert2';
-import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 @Component({
   selector: 'app-venta',
@@ -51,6 +50,7 @@ export class VentaComponent {
   tipodePagoPorDefecto: string = 'Efectivo';
 
   //Total a pagar por la cuenta  min 05.56 parte 12
+  //Para que pueda ser actualizado el total en caso de quitar un producto
   totalPagar: number = 0;
 
   //Formulario para agregar controles extras para validar la venta
@@ -139,6 +139,8 @@ export class VentaComponent {
     //Retorna el producto y su propiedad nombre Producto
     return producto.nombreProducto;
   }
+
+  //Evento para mostrar el precio del producto búscado
 
   //Evento para guardar temporalmente el producto seleccionado de la lista min 16.20 parte 12
   //Recibe un evento

@@ -1,0 +1,18 @@
+/* Trabajando en los estilos de la estructura venta min 56.14 parte 12 */
+
+/* Para que todos los campos tomen un ancho de 100% */
+.full-width {
+  width: 100%;
+}
+
+/* Para la tabla */
+table {
+  width: 100%;
+}
+
+#sameLine {
+  display: flex; /*Indica que se usará flexbox*/
+  justify-content: space-between; /*Los elementos se moveran a la izquierda y derecha*/
+  align-items: center; /*Alineamos de manera vertical*/
+  /* padding: 6px; */
+}
