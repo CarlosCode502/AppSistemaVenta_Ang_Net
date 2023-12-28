@@ -24,7 +24,7 @@ export class UtilidadService {
       //De manera vertical al inicio
       verticalPosition: 'top',
       //Se va mostrar durante 3s
-      duration: 3000,
+      duration: 5000,
     });
   }
 

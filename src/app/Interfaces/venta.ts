@@ -7,7 +7,7 @@ export interface Venta {
   idVenta?: number;
   numeroDocumento?: string;
   tipoPago: string;
-  totalTexto: string;
   fechaRegistro?: string;
+  totalTexto: string;
   tblDetalleVenta: DetalleVenta[]; //Array hace ref a detalle-venta.ts
 }

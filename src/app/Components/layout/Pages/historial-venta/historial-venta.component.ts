@@ -52,14 +52,15 @@ export const MY_DATA_FORMATS = {
   ],
 })
 //Importar el método o métodos min 20.01 parte 13
-export class HistorialVentaComponent implements AfterViewInit {
+export class HistorialVentaComponent implements OnInit, AfterViewInit {
   //Formulario que contiene nuestros controles min 20.25 parte 13
   formularioBusqueda: FormGroup;
+
   //Contiene los distintos filtros por como se puede obtener un rango de fechas
   //Se mostrará en un desplegable con opcciones de búsqueda
   opcionesBusqueda: any[] = [
     { value: 'fecha', descripcion: 'Por fechas' },
-    { value: 'numeroVenta', descripcion: 'Numero de venta' },
+    { value: 'numero', descripcion: 'Numero de venta' },
   ];
 
   //Columnas que va a tener la tabla min 22.19 parte 13
@@ -76,7 +77,7 @@ export class HistorialVentaComponent implements AfterViewInit {
   //Fuente de origen para mostrar los datos de la tabla min 23.10 parte 13
   datosListaVentas = new MatTableDataSource(this.dataInicio);
 
-  //Para la páginacion
+  //Para la páginacion (! que puede ser vacio)
   @ViewChild(MatPaginator) paginacionTabla!: MatPaginator;
 
   //Inyectar las dependencias min 23.59 parte 13
@@ -93,9 +94,9 @@ export class HistorialVentaComponent implements AfterViewInit {
     //Agregar campos del formulario min 25.02 parte 13
     this.formularioBusqueda = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
-      //Su cambia a por numero se búscara por número
+      //SI cambia a por numero se búscara por número
       buscarPor: ['fecha'],
-      numeroVenta: [''],
+      numero: [''],
       fechaInicio: [''],
       fechaFin: [''],
     });
@@ -106,19 +107,14 @@ export class HistorialVentaComponent implements AfterViewInit {
       .get('buscarPor')
       ?.valueChanges.subscribe((value) => {
         this.formularioBusqueda.patchValue({
-          numeroVenta: '',
+          numero: '',
           fechaInicio: '',
           fechaFin: '',
         });
       });
   }
 
-  //Crear el evento del componente AfterViewInit para la páginacion min 28.08 parte 13
-  ngAfterViewInit(): void {
-    //Accedemos a la fuente de datos con el método paginator y se le asigna
-    //se crea una nueva instancia que va a contener el valor de la páginacion
-    this.datosListaVentas.paginator = this.paginacionTabla;
-  }
+  ngOnInit(): void {}
 
   //Método que permite aplicar los filtros a la tabla cuando se esta realizando una búsqueda min 28.16 parte 13
   //Recibe un evento
@@ -128,6 +124,14 @@ export class HistorialVentaComponent implements AfterViewInit {
     //Aplica los filtros solo a la fuente de datos de las ventas
     //Se usa trim(para eliminar espacios al inicio y fin) además todo el texto sera en minúsculas
     this.datosListaVentas.filter = filterValue.trim().toLocaleLowerCase();
+    // this.datosListaVentas.paginator = this.paginacionTabla;
+  }
+
+  //Crear el evento del componente AfterViewInit para la páginacion min 28.08 parte 13
+  ngAfterViewInit(): void {
+    //Accedemos a la fuente de datos con el método paginator y se le asigna
+    //se crea una nueva instancia que va a contener el valor de la páginacion
+    this.datosListaVentas.paginator = this.paginacionTabla;
   }
 
   //Método que enviara el filtro elegido para buscar venta si es fecha o numero min 28.50 parte 13
@@ -136,10 +140,13 @@ export class HistorialVentaComponent implements AfterViewInit {
     let _fechaInicio: string = '';
     let _fechaFin: string = '';
 
+    let _numero: string = '';
+
     //Validar cuando sea por rango de fechas y cuando sea por nombre min 29.28 parte 13
     if (this.formularioBusqueda.value.buscarPor === 'fecha') {
       //Si se selecciono por fecha asignamos el valor a las variables
       //Utilizando moment para convertir a fecha con formato min 30.13 parte 13
+      //Primero se obtiene el valor luego se encapsula con moment
       _fechaInicio = moment(this.formularioBusqueda.value.fechaInicio).format(
         'DD/MM/YYYY'
       );
@@ -149,7 +156,7 @@ export class HistorialVentaComponent implements AfterViewInit {
 
       //Validar si las fechas recibidas son válidas min 30.59 parte 13
       //Si fecha inicio o fecha fin son invalidas
-      if (_fechaInicio === 'invalid date' || _fechaFin === 'invalid date') {
+      if (_fechaInicio === 'Invalid date' || _fechaFin === 'Invalid date') {
         //Mostrará una alerta para que verifique las fechas si estan completas o correctas min 31.46 parte 13
         this._utilidadService.mostrarAlerta(
           'Debe ingresar ambas fechas',
@@ -158,14 +165,15 @@ export class HistorialVentaComponent implements AfterViewInit {
         //Luego se retornara el msj
         return;
       }
-    } //Ya no agregamos o validamos si es numero
+    }
 
+    //Ya no agregamos o validamos si es numero
     //Ejecutar servicio para obtener el historial min 32.40 parte 13
     this._ventaService
       .Historial(
         //Enviamos los parametros que este recibe (4 argumentos)
         this.formularioBusqueda.value.buscarPor,
-        this.formularioBusqueda.value.numeroVenta,
+        this.formularioBusqueda.value.numero,
         _fechaInicio,
         _fechaFin
       )
@@ -174,7 +182,16 @@ export class HistorialVentaComponent implements AfterViewInit {
         next: (data) => {
           //Si la respuesta es exitosa se envia el valor
           if (data.status) {
-            this.datosListaVentas = data.value;
+            if (data.value == 0) {
+              this._utilidadService.mostrarAlerta(
+                'No se encontraron datos por el tipo de filtro',
+                'Opss!'
+              );
+              return;
+            }
+
+            // this.datosListaVentas.paginator = this.paginacionTabla;
+            this.datosListaVentas.data = data.value;
           }
           //En caso de error
           else {
@@ -184,6 +201,10 @@ export class HistorialVentaComponent implements AfterViewInit {
             );
           }
         },
+        //Al finalizar completar se volveran a mostrar los valores
+        // complete: () => {
+        //   this.datosListaVentas.paginator = this.paginacionTabla;
+        // },
         //Por si existe algun error en la api
         error: (e) => {},
       });

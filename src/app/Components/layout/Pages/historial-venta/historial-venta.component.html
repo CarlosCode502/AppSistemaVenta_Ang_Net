@@ -38,12 +38,12 @@
         <!-- Si el campo búscar es igual a numero este campo se va a mostrar sino se va a ocultar-->
         <mat-form-field
           appearance="fill"
-          *ngIf="formularioBusqueda.value.buscarPor == 'numeroVenta'"
+          *ngIf="formularioBusqueda.value.buscarPor === 'numero'"
         >
           <!-- Titulo del campo -->
           <mat-label>Número de Orden</mat-label>
           <!-- El contnido que va a corresponder al campo de formControlName -->
-          <input matInput autocomplete="off" formControlName="numeroVenta" />
+          <input matInput autocomplete="off" formControlName="numero" />
         </mat-form-field>
 
         <!-- Campo para mostrar el calendario (picker1) min 41.44 parte 13-->
@@ -51,7 +51,7 @@
         <!-- Si el campo búscar es igual a fecha este campo se va a mostrar sino se va a ocultar-->
         <mat-form-field
           appearance="fill"
-          *ngIf="formularioBusqueda.value.buscarPor == 'fecha'"
+          *ngIf="formularioBusqueda.value.buscarPor === 'fecha'"
         >
           <!-- Titulo del campo -->
           <mat-label>Fecha de Inicio</mat-label>
@@ -105,6 +105,7 @@
           [disabled]="formularioBusqueda.invalid"
           type="submit"
           class="boton-buscar"
+          (click)="ngAfterViewInit()"
         >
           <mat-icon>search</mat-icon>Buscar
         </button>
@@ -120,7 +121,7 @@
     <!-- Verificar appearance ERROR AQUI -->
 
     <!-- La clase busq contiene un estilo para que el control ocupe el 100% del contenedor -->
-    <mat-form-field class="busq input-filter" appearance="fill">
+    <mat-form-field class="input-filter" appearance="fill">
       <mat-label>Buscar por:</mat-label>
       <!-- Campo que obtiene un filtro (id es #input del min 28.16 parte 13)-->
       <!--  lo ejecuta con KeyUp al moemto de soltar una tecla -->
