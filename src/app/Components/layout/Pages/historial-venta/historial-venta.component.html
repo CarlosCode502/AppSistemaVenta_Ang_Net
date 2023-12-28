@@ -1,2 +1,222 @@
 <!-- Creando páginas y componentes a partir del min 16.50 parte 8 -->
-<p>historial-venta works!</p>
+
+<!-- Aquí va a estar todo el estilo que va a tener nuestro modal min 36.22 parte 13 -->
+<!-- Titulo de seccion -->
+<h1 style="margin: 10px 0px 0px 40px; text-transform: uppercase">
+  Historial de Ventas
+</h1>
+
+<!-- Tarjeta donde se mostrará la tabla de ventas, botones y páginacion -->
+<mat-card style="margin: 20px 40px 40px 40px">
+  <!-- Todo el contenido min 36.49 parte 13 -->
+  <mat-card-content>
+    <!-- Formulario de búsqueda -->
+    <!-- Contiene un ngSubmit para ejecutar el método buscarVentas de (min 28.50 parte 13) -->
+    <form [formGroup]="formularioBusqueda" (ngSubmit)="buscarVentas()">
+      <!-- Contendrá los campos -->
+      <div class="campos-formulario">
+        <!-- Agregando un desplegable min 38.20 parte 13 -->
+        <mat-form-field appearance="fill">
+          <!-- Titulo del campo -->
+          <mat-label>Buscar por</mat-label>
+          <!-- Un desplegable DropDownList -->
+          <mat-select formControlName="buscarPor">
+            <!-- Se va a componer de un elemento iterable min 39.09 parte 13-->
+            <!-- Se obtienen de arreglo del (min 20.36 parte 13 aprox) -->
+            <!-- El campo valor y descripcion se obtienen de allí mismo -->
+            <mat-option
+              *ngFor="let item of opcionesBusqueda"
+              [value]="item.value"
+            >
+              {{ item.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Campo del formulario con apariencia min 40.18 parte 13-->
+        <!-- ngIf Para ocultar en este caso una etiqueta -->
+        <!-- Si el campo búscar es igual a numero este campo se va a mostrar sino se va a ocultar-->
+        <mat-form-field
+          appearance="fill"
+          *ngIf="formularioBusqueda.value.buscarPor == 'numeroVenta'"
+        >
+          <!-- Titulo del campo -->
+          <mat-label>Número de Orden</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <input matInput autocomplete="off" formControlName="numeroVenta" />
+        </mat-form-field>
+
+        <!-- Campo para mostrar el calendario (picker1) min 41.44 parte 13-->
+        <!-- ngIf Para ocultar en este caso una etiqueta -->
+        <!-- Si el campo búscar es igual a fecha este campo se va a mostrar sino se va a ocultar-->
+        <mat-form-field
+          appearance="fill"
+          *ngIf="formularioBusqueda.value.buscarPor == 'fecha'"
+        >
+          <!-- Titulo del campo -->
+          <mat-label>Fecha de Inicio</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <input
+            matInput
+            autocomplete="off"
+            formControlName="fechaInicio"
+            [matDatepicker]="picker1"
+          />
+          <!-- Para personalizar nuestro calendario agregamos propiedades min 42.47 parte 13 -->
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker1"
+          ></mat-datepicker-toggle>
+          <!-- Etiqueta de identificador para el llamado de donde mostrr el identificador -->
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Campo para mostrar el calendario (picker2) min 45.14 parte 13-->
+        <!-- ngIf Para ocultar en este caso una etiqueta -->
+        <!-- Si el campo búscar es igual a fecha este campo se va a mostrar sino se va a ocultar-->
+        <mat-form-field
+          appearance="fill"
+          *ngIf="formularioBusqueda.value.buscarPor == 'fecha'"
+        >
+          <!-- Titulo del campo -->
+          <mat-label>Fecha de Fin</mat-label>
+          <!-- El contnido que va a corresponder al campo de formControlName -->
+          <input
+            matInput
+            autocomplete="off"
+            formControlName="fechaFin"
+            [matDatepicker]="picker2"
+          />
+          <!-- Para personalizar nuestro calendario agregamos propiedades min 45.21 parte 13 -->
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker2"
+          ></mat-datepicker-toggle>
+          <!-- Etiqueta de identificador para el llamado de donde mostrr el identificador -->
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Botón para poder crear la búsqueda min 46.18 parte 13-->
+        <!-- Si los campos de formularioBusqueda no estan completos se desabilita este btn -->
+        <!-- No ejecuta método con click ya que ya esta especificado dentro de lo que va a a validar -->
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="formularioBusqueda.invalid"
+          type="submit"
+          class="boton-buscar"
+        >
+          <mat-icon>search</mat-icon>Buscar
+        </button>
+      </div>
+    </form>
+
+    <!-- El resultado se va a mostrar dentro de una tabla fuera del formulario min 48.02 parte 13 -->
+    <!-- Para division o separación -->
+    <mat-divider></mat-divider>
+
+    <!-- Creando la tabla min 48.14 parte 13 -->
+
+    <!-- Verificar appearance ERROR AQUI -->
+
+    <!-- La clase busq contiene un estilo para que el control ocupe el 100% del contenedor -->
+    <mat-form-field class="busq input-filter" appearance="fill">
+      <mat-label>Buscar por:</mat-label>
+      <!-- Campo que obtiene un filtro (id es #input del min 28.16 parte 13)-->
+      <!--  lo ejecuta con KeyUp al moemto de soltar una tecla -->
+      <input matInput (keyup)="aplicarFiltroTabla($event)" #input />
+    </mat-form-field>
+
+    <!-- Componente para resaltar la tabla min 49.26 parte 13-->
+    <div class="mat-elevation-z2">
+      <!-- Tabla (obtiene la fuente de datos) -->
+      <table mat-table [dataSource]="datosListaVentas">
+        <!-- Columnas con nombre especifico especificadas en (min 22.19 parte 13)-->
+        <ng-container matColumnDef="fechaRegistro">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Fecha de Registro</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            {{ element.fechaRegistro }}
+          </td>
+        </ng-container>
+
+        <!-- Columnas con nombre especifico especificadas en (min 22.19 parte 13)-->
+        <ng-container matColumnDef="numeroDocumento">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Número de Documento</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            {{ element.numeroDocumento }}
+          </td>
+        </ng-container>
+
+        <!-- Columnas con nombre especifico especificadas en (min 22.19 parte 13)-->
+        <ng-container matColumnDef="tipoPago">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Tipo de Pago</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            {{ element.tipoPago }}
+          </td>
+        </ng-container>
+
+        <!-- Columnas con nombre especifico especificadas en (min 22.19 parte 13)-->
+        <ng-container matColumnDef="total">
+          <!-- Encabezado de esta columna -->
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            {{ element.totalTexto }}
+          </td>
+        </ng-container>
+
+        <!-- Columna de acciones min 51.20 parte 13 -->
+        <!-- Columnas con nombre especifico especificadas en (min 22.19 parte 13)-->
+        <ng-container matColumnDef="accion">
+          <!-- Encabezado de esta columna (no contendra texto) -->
+          <th mat-header-cell *matHeaderCellDef style="width: 80px"></th>
+          <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
+          <!-- Mismo nombre que matColumnDef -->
+          <td mat-cell *matCellDef="let element">
+            <!-- Agregamos los botones de las acciones min 51.35 parte 13 -->
+            <!-- Botón que contiene o ejecuta el método ver detalle venta recibe un (element) -->
+            <!-- matTooltip es un msj pequeño al hacer hover sobre un control min 51.57 parte 13 -->
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="verDetalleVenta(element)"
+              matTooltip="Ver detalles"
+            >
+              <!-- Icono que no tiene texto -->
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Para establecer las columnas min 52.28 parte 13 -->
+        <!-- Del (min 22.19 parte 13) -->
+        <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+        <!-- Va a iterar cada una de las filas de nuestra tabla o data -->
+        <tr mat-row *matRowDef="let row; columns: columnasTabla"></tr>
+
+        <!-- Fila para mostrar un dato en que la búsqueda por filtro no coincida min 52.31 parte 13 -->
+        <tr class="mat-row" *matNoDataRow>
+          <!-- Msj de error si no se encuentra nada (al final recibe el nombre el el campo de busqueda ) -->
+          <td class="mat-cell" colspan="4">
+            No hay datos que coincidan con la búsqueda "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+
+      <!-- Crear la páginacion de los datos usando paginator min 52.38 parte 13 -->
+      <!-- [número de filas por páginacion] botones para regresar o sigiente en la paginacion-->
+      <mat-paginator [pageSizeOptions]="[4, 8, 12]" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

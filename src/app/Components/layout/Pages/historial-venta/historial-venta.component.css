@@ -1,0 +1,27 @@
+/* Diseño de la estructura historial venta min 53.39 parte 13 */
+/* Para los campos del formulario */
+.campos-formulario {
+  display: flex;
+  /* Alinear todos los items desde el inicio */
+  align-items: flex-start;
+}
+
+/* Formato para el btn buscar */
+.boton-buscar {
+  width: 150px;
+  margin-top: 15px;
+}
+
+/* Para los campos */
+mat-form-field {
+  margin-right: 10px;
+}
+
+table {
+  width: 100%;
+}
+
+.input-filter {
+  width: 100%;
+  font-size: 14px;
+}
