@@ -12,13 +12,14 @@
   <mat-card-content>
     <!-- Formulario de búsqueda -->
     <!-- Contiene un ngSubmit para ejecutar el método buscarVentas de (min 28.50 parte 13) -->
-    <form [formGroup]="formularioBusqueda" (ngSubmit)="buscarVentas()">
+    <!-- (ngSubmit)="buscarVentas()" -->
+    <form [formGroup]="formularioBusqueda">
       <!-- Contendrá los campos -->
       <div class="campos-formulario">
         <!-- Agregando un desplegable min 38.20 parte 13 -->
         <mat-form-field appearance="fill">
           <!-- Titulo del campo -->
-          <mat-label>Buscar por</mat-label>
+          <mat-label>Buscar por:</mat-label>
           <!-- Un desplegable DropDownList -->
           <mat-select formControlName="buscarPor">
             <!-- Se va a componer de un elemento iterable min 39.09 parte 13-->
@@ -38,12 +39,12 @@
         <!-- Si el campo búscar es igual a numero este campo se va a mostrar sino se va a ocultar-->
         <mat-form-field
           appearance="fill"
-          *ngIf="formularioBusqueda.value.buscarPor === 'numero'"
+          *ngIf="formularioBusqueda.value.buscarPor === 'numeroVenta'"
         >
           <!-- Titulo del campo -->
           <mat-label>Número de Orden</mat-label>
           <!-- El contnido que va a corresponder al campo de formControlName -->
-          <input matInput autocomplete="off" formControlName="numero" />
+          <input matInput autocomplete="off" formControlName="numeroVenta" />
         </mat-form-field>
 
         <!-- Campo para mostrar el calendario (picker1) min 41.44 parte 13-->
@@ -99,13 +100,14 @@
         <!-- Botón para poder crear la búsqueda min 46.18 parte 13-->
         <!-- Si los campos de formularioBusqueda no estan completos se desabilita este btn -->
         <!-- No ejecuta método con click ya que ya esta especificado dentro de lo que va a a validar -->
+        <!-- (click)="ngAfterViewInit()" -->
         <button
           mat-raised-button
           color="primary"
           [disabled]="formularioBusqueda.invalid"
           type="submit"
           class="boton-buscar"
-          (click)="ngAfterViewInit()"
+          (click)="buscarVentas()"
         >
           <mat-icon>search</mat-icon>Buscar
         </button>
@@ -122,9 +124,10 @@
 
     <!-- La clase busq contiene un estilo para que el control ocupe el 100% del contenedor -->
     <mat-form-field class="input-filter" appearance="fill">
-      <mat-label>Buscar por:</mat-label>
+      <mat-label>Buscar por número de documento</mat-label>
       <!-- Campo que obtiene un filtro (id es #input del min 28.16 parte 13)-->
       <!--  lo ejecuta con KeyUp al moemto de soltar una tecla -->
+      <!-- [disabled]="datosListaVentas.data.length <= 0" para desabilitar si la tabla no tiene datos -->
       <input matInput (keyup)="aplicarFiltroTabla($event)" #input />
     </mat-form-field>
 
@@ -160,6 +163,7 @@
           <th mat-header-cell *matHeaderCellDef>Tipo de Pago</th>
           <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
           <!-- Mismo nombre que matColumnDef -->
+          <!-- No es necesario agregar (tipoPago == 1 ? 'Efc' : 'Tarjeta') -->
           <td mat-cell *matCellDef="let element">
             {{ element.tipoPago }}
           </td>
@@ -209,10 +213,14 @@
         <tr class="mat-row" *matNoDataRow>
           <!-- Msj de error si no se encuentra nada (al final recibe el nombre el el campo de busqueda ) -->
           <td class="mat-cell" colspan="4">
-            No hay datos que coincidan con la búsqueda "{{ input.value }}"
+            No hay datos en esta tabla que coincidan con la búsqueda "{{
+              input.value
+            }}"
           </td>
         </tr>
       </table>
+
+      <mat-divider></mat-divider>
 
       <!-- Crear la páginacion de los datos usando paginator min 52.38 parte 13 -->
       <!-- [número de filas por páginacion] botones para regresar o sigiente en la paginacion-->

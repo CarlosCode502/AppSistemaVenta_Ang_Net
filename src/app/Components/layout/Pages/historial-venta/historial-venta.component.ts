@@ -59,8 +59,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
   //Contiene los distintos filtros por como se puede obtener un rango de fechas
   //Se mostrará en un desplegable con opcciones de búsqueda
   opcionesBusqueda: any[] = [
-    { value: 'fecha', descripcion: 'Por fechas' },
-    { value: 'numero', descripcion: 'Numero de venta' },
+    { value: 'fecha', descripcion: 'Rango de Fechas' },
+    { value: 'numeroVenta', descripcion: 'Numero de venta' },
   ];
 
   //Columnas que va a tener la tabla min 22.19 parte 13
@@ -95,8 +95,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
     this.formularioBusqueda = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
       //SI cambia a por numero se búscara por número
-      buscarPor: ['fecha'],
-      numero: [''],
+      buscarPor: ['numeroVenta'],
+      numeroVenta: ['0012'],
       fechaInicio: [''],
       fechaFin: [''],
     });
@@ -107,7 +107,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
       .get('buscarPor')
       ?.valueChanges.subscribe((value) => {
         this.formularioBusqueda.patchValue({
-          numero: '',
+          numeroVenta: '',
           fechaInicio: '',
           fechaFin: '',
         });
@@ -135,7 +135,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
   }
 
   //Método que enviara el filtro elegido para buscar venta si es fecha o numero min 28.50 parte 13
-  buscarVentas() {
+  public buscarVentas() {
+    let _buscarPor: string = '';
     //Var que contienen el rango de fechas
     let _fechaInicio: string = '';
     let _fechaFin: string = '';
@@ -144,6 +145,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
 
     //Validar cuando sea por rango de fechas y cuando sea por nombre min 29.28 parte 13
     if (this.formularioBusqueda.value.buscarPor === 'fecha') {
+      // _buscarPor = this.formularioBusqueda.value.buscarPor;
+
       //Si se selecciono por fecha asignamos el valor a las variables
       //Utilizando moment para convertir a fecha con formato min 30.13 parte 13
       //Primero se obtiene el valor luego se encapsula con moment
@@ -160,12 +163,24 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
         //Mostrará una alerta para que verifique las fechas si estan completas o correctas min 31.46 parte 13
         this._utilidadService.mostrarAlerta(
           'Debe ingresar ambas fechas',
-          'Opss!'
+          'Error!'
         );
         //Luego se retornara el msj
         return;
       }
     }
+    // else if (this.formularioBusqueda.value.buscarPor === 'numeroVenta') {
+    //   _buscarPor = this.formularioBusqueda.value.buscarPor;
+    //   _numero = this.formularioBusqueda.value.numeroVenta;
+
+    //   if (_numero === '' || _numero.length === 0 || _numero === null) {
+    //     this._utilidadService.mostrarAlerta(
+    //       'Debe ingresar un número de Documento',
+    //       'Error!'
+    //     );
+    //     return;
+    //   }
+    // }
 
     //Ya no agregamos o validamos si es numero
     //Ejecutar servicio para obtener el historial min 32.40 parte 13
@@ -174,6 +189,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
         //Enviamos los parametros que este recibe (4 argumentos)
         this.formularioBusqueda.value.buscarPor,
         this.formularioBusqueda.value.numero,
+        // _buscarPor,
+        // _numero,
         _fechaInicio,
         _fechaFin
       )
@@ -182,16 +199,22 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
         next: (data) => {
           //Si la respuesta es exitosa se envia el valor
           if (data.status) {
-            if (data.value == 0) {
-              this._utilidadService.mostrarAlerta(
-                'No se encontraron datos por el tipo de filtro',
-                'Opss!'
-              );
-              return;
-            }
+            // if (data.value == 0) {
+            //   this._utilidadService.mostrarAlerta(
+            //     'No se encontraron datos por el rango especificado',
+            //     'Opss!'
+            //   );
+            //   return;
+            // }
 
-            // this.datosListaVentas.paginator = this.paginacionTabla;
+            //AQUI ESTABA EL ERROR QUE EVITAVA QUE LA PAGINACION SE MOSTRARÁ
+            //TAMBIEN NO SE PODÍA REALIZAR LA BUSQUEDA POR NUMERO
+            //TAMPOCO BÚSQUEDA POR FILTRO
             this.datosListaVentas.data = data.value;
+
+            console.log(
+              'el valor de numero es: ' + _numero + ' luego de cargar la tabla '
+            );
           }
           //En caso de error
           else {

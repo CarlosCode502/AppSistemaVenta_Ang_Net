@@ -24,9 +24,22 @@ export class UtilidadService {
       //De manera vertical al inicio
       verticalPosition: 'top',
       //Se va mostrar durante 3s
-      duration: 5000,
+      duration: 4000,
     });
   }
+
+  // //Agregado extra
+  // alertaExitosa(mensaje: string, tipo: string) {
+  //   //Abre un acceso al componente
+  //   this._snackBar.open(mensaje, tipo, {
+  //     //Se va a usar la dirección horizontal y se va a mostrar al fondo
+  //     horizontalPosition: 'left',
+  //     //De manera vertical al inicio
+  //     verticalPosition: 'bottom',
+  //     //Se va mostrar durante 3s
+  //     duration: 4000,
+  //   });
+  // }
 
   //min 16.05 parte 9
   //Método que guarda la sesion del usuario (recibe la sesion)
