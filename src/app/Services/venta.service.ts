@@ -32,6 +32,8 @@ export class VentaService {
 
   //Método que permite buscar en el historial segun un filtro min 50.49 parte 7
   //Recibe varios parametros o filtros
+  //NO HACIA FALTA CAMBIAR numeroVenta a numero (pero se intento)
+  //El problema esaba en historial-venta.component entre formularioBusqueda y opcionesBusqueda
   Historial(
     buscarPor: string,
     numeroVenta: string,
@@ -40,8 +42,7 @@ export class VentaService {
   ): Observable<ResponseAPI> {
     //Retorna una respuesta a la solicitud según alguno de sus parametros que recibe
     return this.http.get<ResponseAPI>(`
-      ${this.UrlApi}Historial?buscarPor=${buscarPor}&numeroVenta=
-      ${numeroVenta}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+      ${this.UrlApi}Historial?buscarPor=${buscarPor}&numeroVenta=${numeroVenta}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 
   //Método que permite generar un reporte segun un filtro de fechas min 51.15 parte 7

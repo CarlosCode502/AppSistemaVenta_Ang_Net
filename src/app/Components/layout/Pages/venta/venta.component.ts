@@ -234,8 +234,8 @@ export class VentaComponent {
             //Finalmente se muestra el msj de registro venta exitoso min 26.09 parte 12
             Swal.fire({
               icon: 'success',
-              title: 'Venta Registrada!',
-              text: `Numero de venta: ${response.value.numeroDocumento}`,
+              title: 'Venta Realizada!',
+              text: `Número de venta: ${response.value.numeroDocumento}`,
             });
           }
           //Si el status no es exitoso

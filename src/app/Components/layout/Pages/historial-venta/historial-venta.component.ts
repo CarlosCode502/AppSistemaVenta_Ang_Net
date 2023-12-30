@@ -58,9 +58,10 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
 
   //Contiene los distintos filtros por como se puede obtener un rango de fechas
   //Se mostrará en un desplegable con opcciones de búsqueda
+  //Antes 29/12/2023
   opcionesBusqueda: any[] = [
     { value: 'fecha', descripcion: 'Rango de Fechas' },
-    { value: 'numeroVenta', descripcion: 'Numero de venta' },
+    { value: 'numero', descripcion: 'Numero de venta' },
   ];
 
   //Columnas que va a tener la tabla min 22.19 parte 13
@@ -95,8 +96,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
     this.formularioBusqueda = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
       //SI cambia a por numero se búscara por número
-      buscarPor: ['numeroVenta'],
-      numeroVenta: ['0012'],
+      buscarPor: ['fecha'],
+      numeroVenta: [''],
       fechaInicio: [''],
       fechaFin: [''],
     });
@@ -136,7 +137,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
 
   //Método que enviara el filtro elegido para buscar venta si es fecha o numero min 28.50 parte 13
   public buscarVentas() {
-    let _buscarPor: string = '';
+    // let _buscarPor: string = '';
     //Var que contienen el rango de fechas
     let _fechaInicio: string = '';
     let _fechaFin: string = '';
@@ -168,19 +169,18 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
         //Luego se retornara el msj
         return;
       }
-    }
-    // else if (this.formularioBusqueda.value.buscarPor === 'numeroVenta') {
-    //   _buscarPor = this.formularioBusqueda.value.buscarPor;
-    //   _numero = this.formularioBusqueda.value.numeroVenta;
+    } else if (this.formularioBusqueda.value.buscarPor === 'numero') {
+      // _buscarPor = this.formularioBusqueda.value.buscarPor;
+      _numero = this.formularioBusqueda.value.numeroVenta;
 
-    //   if (_numero === '' || _numero.length === 0 || _numero === null) {
-    //     this._utilidadService.mostrarAlerta(
-    //       'Debe ingresar un número de Documento',
-    //       'Error!'
-    //     );
-    //     return;
-    //   }
-    // }
+      if (_numero === '' || _numero.length === 0 || _numero === null) {
+        this._utilidadService.mostrarAlerta(
+          'Debe ingresar un número de Documento',
+          'Error!'
+        );
+        return;
+      }
+    }
 
     //Ya no agregamos o validamos si es numero
     //Ejecutar servicio para obtener el historial min 32.40 parte 13
@@ -188,9 +188,9 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
       .Historial(
         //Enviamos los parametros que este recibe (4 argumentos)
         this.formularioBusqueda.value.buscarPor,
-        this.formularioBusqueda.value.numero,
+        // this.formularioBusqueda.value.numeroVenta,
         // _buscarPor,
-        // _numero,
+        _numero,
         _fechaInicio,
         _fechaFin
       )
@@ -199,13 +199,15 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
         next: (data) => {
           //Si la respuesta es exitosa se envia el valor
           if (data.status) {
-            // if (data.value == 0) {
-            //   this._utilidadService.mostrarAlerta(
-            //     'No se encontraron datos por el rango especificado',
-            //     'Opss!'
-            //   );
-            //   return;
-            // }
+            if (data.value == 0) {
+              this._utilidadService.mostrarAlerta(
+                'No se encontraron datos por el rango especificado',
+                'Opss!'
+              );
+              return;
+            }
+
+            // this.datosListaVentas.data;
 
             //AQUI ESTABA EL ERROR QUE EVITAVA QUE LA PAGINACION SE MOSTRARÁ
             //TAMBIEN NO SE PODÍA REALIZAR LA BUSQUEDA POR NUMERO
@@ -224,6 +226,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
             );
           }
         },
+
         //Al finalizar completar se volveran a mostrar los valores
         // complete: () => {
         //   this.datosListaVentas.paginator = this.paginacionTabla;
