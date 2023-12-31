@@ -96,8 +96,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
     this.formularioBusqueda = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
       //SI cambia a por numero se búscara por número
-      buscarPor: ['fecha'],
-      numeroVenta: [''],
+      buscarPor: ['numero'],
+      numeroVenta: ['0053'],
       fechaInicio: [''],
       fechaFin: [''],
     });

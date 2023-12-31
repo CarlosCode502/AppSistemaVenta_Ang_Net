@@ -49,13 +49,17 @@
         <!-- Titulo del campo -->
         <mat-label>Total</mat-label>
         <!-- El contnido que va a corresponder a las var creadas en (min 03.12 parte 13) -->
-        <input matInput [(ngModel)]="totalTexto" />
+        <input
+          matInput
+          [(ngModel)]="totalTexto"
+          style="background-color: #92db98"
+        />
       </mat-form-field>
     </mat-grid-tile>
   </mat-grid-list>
 
   <!-- Mostrar la lista de productos min 11.37 parte 13 -->
-  <h4>Lista de productos</h4>
+  <h4>Total de productos ({{ detalleVenta.length }})</h4>
 
   <!-- Tabla (obtiene la fuente de datos) min 12.25 parte 13 -->
   <!-- Los {{element}} son obtenidos de la I detalle-venta.ts -->

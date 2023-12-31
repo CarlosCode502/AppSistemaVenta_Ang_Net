@@ -194,6 +194,15 @@ export class VentaComponent {
         (p) => p.idProducto != detalle.idProducto
       ));
 
+    if (this.listaProductosParaVenta.length <= 0) {
+      this.totalPagar = 0;
+      //Actualizamos la tabla de productos vendidos min 23.09 parte 12
+      //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
+      this.datosDetalleVenta = new MatTableDataSource(
+        this.listaProductosParaVenta
+      );
+    }
+
     //Actualizamos la tabla de productos vendidos min 23.09 parte 12
     //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
     this.datosDetalleVenta = new MatTableDataSource(
