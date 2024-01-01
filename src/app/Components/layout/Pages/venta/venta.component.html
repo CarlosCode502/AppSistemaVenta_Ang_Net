@@ -174,13 +174,23 @@
 
         <!-- Columna de acciones min 50.40 parte 12 -->
         <!-- Columnas con nombre especifico especificadas en (min 06.35 parte 12)-->
-        <ng-container matColumnDef="accion">
+        <ng-container matColumnDef="acciones">
           <!-- Encabezado de esta columna (no contendra texto) -->
           <th mat-header-cell *matHeaderCellDef style="width: 80px"></th>
           <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
           <!-- Mismo nombre que matColumnDef -->
           <td mat-cell *matCellDef="let element">
             <!-- Agregamos el botón de la accion eliminar o quitra producto de listaventa min 50.52 parte 12 -->
+            <!-- Botón que contiene o ejecuta el método editar usuario recibe un (element = id usuario) -->
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="editarUsuario(element)"
+            >
+              <!-- Icono que no tiene texto -->
+              <mat-icon>edit</mat-icon>
+            </button>
+
             <!-- Botón que ejecuta el métod eliminar producto recibe un (element = id producto) -->
             <button
               mat-icon-button

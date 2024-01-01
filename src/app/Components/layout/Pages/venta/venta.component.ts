@@ -62,7 +62,7 @@ export class VentaComponent {
     'cantidad',
     'precio',
     'total',
-    'accion',
+    'acciones',
   ];
 
   //Fuente de datos para la tabla ventas
@@ -123,7 +123,6 @@ export class VentaComponent {
 
     //Evento que obtiene los productos cuando se realiza una búsqueda por caracter min 14.10 parte
     //Obtener el campo producto cuando cambien los valores (valueChanges)
-
     this.formularioProductoVenta
       .get('producto')
       ?.valueChanges.subscribe((value) => {
@@ -151,14 +150,51 @@ export class VentaComponent {
 
   //Método para agregar el producto elegido o seleccionado para proceder a la venta min 17.12 parte 12
   agregarProductoParaVenta() {
+    //Variable que obtiene el id del producto seleccionado
+    // const _idProductoSelec: number = 0;
+
     //Representa al valor del campo cantidad del formularioProducto venta en (min 06.35 parte 12)
-    const _cantidad: number = this.formularioProductoVenta.value.cantidad;
+    let _cantidad: number = this.formularioProductoVenta.value.cantidad;
     //Representa el valor del campo precio del productoSeleccionado
     const _precio: number = parseFloat(this.productoSeleccionado.precio);
     //Representa el valor del campo total (op de cant * precio)
     const _total: number = _cantidad * _precio;
     //Contiene el total de todos los productos
     this.totalPagar = this.totalPagar + _total;
+
+    // if (this.listaProductosParaVenta.length > 0) {
+    //   let _productoListaExiste = this.listaProductosParaVenta.find(
+    //     (p) => p.idProducto == this.productoSeleccionado.idProducto
+    //   );
+
+    //   if (_productoListaExiste) {
+    //     _productoListaExiste.cantidad += _cantidad;
+
+    //     this.listaProductosParaVenta.pop();
+    //   }
+    // }
+
+    // //Verifica si existe algún elemento dentro del arreglo
+    // if (this.listaProductosParaVenta.length > 0) {
+    //   //Verifica si el producto seleccionado se encuentra dentro del listado de productos para venta
+    //   if (
+    //     this.listaProductosParaVenta.find(
+    //       (p) => p.idProducto === this.productoSeleccionado.idProducto
+    //     )
+    //   ) {
+    //     //si es afirmativo se obtiene la cantidad del producto existente
+    //     //se obtiene el producto
+    //     const _cantidadDeExistente = this.listaProductosParaVenta.find((p) =>
+    //       p.idProducto === this.productoSeleccionado.idProducto
+    //         ? p.cantidad
+    //         : ''
+    //     );
+
+    //     console.log(
+    //       'el valor de cantidadExiste es' + _cantidadDeExistente?.cantidad
+    //     );
+    //   }
+    // }
 
     //Actualizamos los productos seleccionados para la venta min 19.09 parte 12
     //Especificamos las propiedades correspondientes a I detalle-venta
@@ -181,6 +217,30 @@ export class VentaComponent {
       producto: '',
       cantidad: '',
     });
+
+    // _idProductoSelec: this.productoSeleccionado.idProducto;
+  }
+
+  //Método para poder editar un usuario al momento de hacer clic en dicho btn min 48.48 parte 10
+  //Recibe como parametro un usuario
+  editarUsuario(producto: Producto) {
+    // //Se utiliza al dialog para que ejecute o abra el modal usuario
+    // this.dialog
+    //   //Tambien puede recibir datos del usuario
+    //   .open(ModalUsuarioComponent, {
+    //     //Para evitar que el modal se cierre si el usuario hace click fuera de este
+    //     disableClose: true,
+    //     data: usuario, //Le pasamos el usuario
+    //   })
+    //   //Se ejecuta luego de cerrar se obtiene un resultado (que se envia en min 19.25 parte 10)
+    //   .afterClosed()
+    //   .subscribe((resultado) => {
+    //     //Valida si el resultado es igual a true
+    //     if (resultado === 'true') {
+    //       //Se ejecuta el método obtener usuarios (actualiza la tabla)
+    //       this.obtenenrUsuarios();
+    //     }
+    //   });
   }
 
   //Método para poder eliminar un producto seleccionado en la listaParaVenta min 21.40 parte 12
@@ -191,9 +251,18 @@ export class VentaComponent {
       //Se va a actualizar productosParaVenta desde el filtro
       //Se retornan los productos que no coincidan con el id del producto a eliminar
       (this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
-        (p) => p.idProducto != detalle.idProducto
+        (p) =>
+          p.idProducto != detalle.idProducto &&
+          this.totalPagar - parseFloat(detalle.totalTexto)
       ));
 
+    //Se
+
+    //Actualizamos la tabla de productos vendidos min 23.09 parte 12
+    //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
+
+    //Si la cantidad de elementos de la lista es menor o igual a cero
+    //Restablecemos el valor del campo y actualizamos el listatabla
     if (this.listaProductosParaVenta.length <= 0) {
       this.totalPagar = 0;
       //Actualizamos la tabla de productos vendidos min 23.09 parte 12
@@ -201,13 +270,11 @@ export class VentaComponent {
       this.datosDetalleVenta = new MatTableDataSource(
         this.listaProductosParaVenta
       );
+    } else {
+      this.datosDetalleVenta = new MatTableDataSource(
+        this.listaProductosParaVenta
+      );
     }
-
-    //Actualizamos la tabla de productos vendidos min 23.09 parte 12
-    //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
-    this.datosDetalleVenta = new MatTableDataSource(
-      this.listaProductosParaVenta
-    );
   }
 
   //Método para poder registrar la venta min 23.28 parte 12
