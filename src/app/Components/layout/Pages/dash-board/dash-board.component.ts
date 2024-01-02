@@ -47,7 +47,7 @@ export class DashBoardComponent implements OnInit {
         datasets: [
           {
             //Titulo de la etiqueta
-            label: '# de Ventas',
+            label: '# Total de ventas por día',
             //Fuente de datos o data
             data: dataGrafico,
             //Color de fondo (algo transparente o opaco)

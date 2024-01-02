@@ -1,2 +1,83 @@
 <!-- Creando páginas y componentes a partir del min 16.50 parte 8 -->
-<p>dash-board works!</p>
+<!-- Aquí va a estar todo el estilo que va a tener nuestro menú min 15.02 parte 15 -->
+<!-- Para esto se va a hacer uso de AngularMaterial -->
+<!-- Titulo de seccion -->
+<h1 style="margin: 10px 0px 0px 40px; text-transform: uppercase">
+  Dashboard - resumen de la última semana
+</h1>
+
+<!-- Tarjeta donde se mostrará la tabla de usuarios, botones y páginacion -->
+<mat-card style="margin: 20px 40px 40px 40px">
+  <!-- Contenido que se va a mostrar min 15.12 parte 15 -->
+  <mat-card-content>
+    <!-- Listado de columnas y alto por fila-->
+    <mat-grid-list cols="3" rowHeight="100px">
+      <!-- Primera columna -->
+      <mat-grid-tile>
+        <!-- Tarjetas -->
+        <mat-card class="card-info">
+          <!-- Encabezado de tarjeta -->
+          <mat-card-header>
+            <!-- Para agregar icono o img -->
+            <div mat-card-avatar>
+              <mat-icon color="accent">payments</mat-icon>
+            </div>
+            <!-- Titulo de tarjeta-->
+            <mat-card-title>Total de Ingresos</mat-card-title>
+            <!-- Subtitulo de tarjeta -->
+            <mat-card-subtitle>Q {{ totalIngresos }}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </mat-grid-tile>
+
+      <!-- Segunda columna -->
+      <mat-grid-tile>
+        <!-- Tarjetas -->
+        <mat-card class="card-info">
+          <!-- Encabezado de tarjeta -->
+          <mat-card-header>
+            <!-- Para agregar icono o img -->
+            <div mat-card-avatar>
+              <mat-icon color="warn">sell</mat-icon>
+            </div>
+            <!-- Titulo de tarjeta-->
+            <mat-card-title>Ventas Realizadas</mat-card-title>
+            <!-- Subtitulo de tarjeta -->
+            <mat-card-subtitle> {{ totalVentas }}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </mat-grid-tile>
+
+      <!-- Tercera columna -->
+      <mat-grid-tile>
+        <!-- Tarjetas -->
+        <mat-card class="card-info">
+          <!-- Encabezado de tarjeta -->
+          <mat-card-header>
+            <!-- Para agregar icono o img -->
+            <div mat-card-avatar>
+              <mat-icon color="primary">collections_bookmark</mat-icon>
+            </div>
+            <!-- Titulo de tarjeta-->
+            <mat-card-title>Productos Vendidos</mat-card-title>
+            <!-- Subtitulo de tarjeta -->
+            <mat-card-subtitle> {{ totalProductos }}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <!-- Tarjeta para las gráficas -->
+    <mat-card style="margin-top: 15px">
+      <!-- Contenido -->
+      <mat-card-content>
+        <!-- Contenedor de las gráficas -->
+        <div style="width: 100%; height: 400px">
+          <!-- Para poder dibujar o graficar (contiene un id min 04.35 parte 15) min 21.26 parte 15 -->
+          <!-- Identificar que aquí se va a pintar el gráfico -->
+          <canvas id="chartBarras"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+</mat-card>
