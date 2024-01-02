@@ -43,7 +43,7 @@ export const MY_DATA_FORMATS = {
   selector: 'app-historial-venta',
   templateUrl: './historial-venta.component.html',
   styleUrls: ['./historial-venta.component.css'],
-  //Agregamos a este componente un proveedor min 19.26 parte 13
+  //Agregamos a este componente un proveedor para servicio de fecha min 19.26 parte 13
   providers: [
     {
       provide: MAT_DATE_FORMATS,
@@ -61,7 +61,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
   //Antes 29/12/2023
   opcionesBusqueda: any[] = [
     { value: 'fecha', descripcion: 'Rango de Fechas' },
-    { value: 'numero', descripcion: 'Numero de venta' },
+    { value: 'numero', descripcion: 'Número de Documento' },
   ];
 
   //Columnas que va a tener la tabla min 22.19 parte 13
@@ -96,8 +96,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
     this.formularioBusqueda = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
       //SI cambia a por numero se búscara por número
-      buscarPor: ['numero'],
-      numeroVenta: ['0053'],
+      buscarPor: ['fecha'],
+      numeroVenta: [''],
       fechaInicio: [''],
       fechaFin: [''],
     });
@@ -111,7 +111,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
           numeroVenta: '',
           fechaInicio: '',
           fechaFin: '',
-        });
+        }),
+          (this.datosListaVentas.data = []);
       });
   }
 
@@ -204,6 +205,9 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
                 'No se encontraron datos por el rango especificado',
                 'Opss!'
               );
+
+              this.datosListaVentas.data = [];
+
               return;
             }
 
@@ -214,9 +218,9 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
             //TAMPOCO BÚSQUEDA POR FILTRO
             this.datosListaVentas.data = data.value;
 
-            console.log(
-              'el valor de numero es: ' + _numero + ' luego de cargar la tabla '
-            );
+            // console.log(
+            //   'el valor de numero es: ' + _numero + ' luego de cargar la tabla '
+            // );
           }
           //En caso de error
           else {
@@ -224,6 +228,8 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
               'No se encontraron datos',
               'Opss!'
             );
+
+            this.datosListaVentas.data = [];
           }
         },
 
