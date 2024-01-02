@@ -21,6 +21,7 @@ import * as XLSX from 'xlsx';
 import { Reporte } from 'src/app/Interfaces/reporte';
 import { VentaService } from 'src/app/Services/venta.service';
 import { UtilidadService } from 'src/app/Reutilizable/utilidad.service';
+import { formatDate } from '@angular/common';
 
 //Configurando el formato de fecha que se va a utilizar min 02.00 parte 14
 export const MY_DATA_FORMATS = {
@@ -66,6 +67,18 @@ export class ReporteComponent {
     'tipoPago',
     'total',
   ];
+  //Prueba con any valor y descripcion
+  // columnasTabla: any[] = [
+  //   { value: 'fechaRegistro', descripcion: 'Fecha de Registro' },
+  //   { value: 'numeroVenta', descripcion: 'Número de Documento' },
+  //   { value: 'producto', descripcion: 'Producto' },
+  //   { value: 'cantidad', descripcion: 'Cantidad' },
+  //   { value: 'precio', descripcion: 'Precio' },
+  //   { value: 'totalProducto', descripcion: 'Total de Productos' },
+  //   { value: 'tipoPago', descripcion: 'Tipo de Pago' },
+  //   { value: 'total', descripcion: 'Total neto' },
+  // ];
+
   //Fuente de datos de la tabla
   dataTableVentaReporte = new MatTableDataSource(this.listaVentasReporte);
 
@@ -85,8 +98,8 @@ export class ReporteComponent {
     this.formularioFiltro = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
       //Campos que son requeridos
-      fechaInicio: ['2024-01-01T00:00:00-06:00', Validators.required],
-      fechaFin: ['2024-01-04T00:00:00-06:00', Validators.required],
+      fechaInicio: ['', Validators.required],
+      fechaFin: ['', Validators.required],
     });
   }
 
@@ -160,8 +173,19 @@ export class ReporteComponent {
     });
   }
 
+  //Variables que contienen las fechas
+
   //Método que permitirá exportar un documento de tipo exel min 09.58 parte 14
   exportarExel() {
+    const _fechaInicio = moment(this.formularioFiltro.value.fechaInicio).format(
+      'DD/MM/YYYY'
+    );
+    const _fechaFin = moment(this.formularioFiltro.value.fechaFin).format(
+      'DD/MM/YYYY'
+    );
+
+    const _HoraActual = new Date();
+
     //(libro)contiene la def para un nuevo libro de exel
     const wb = XLSX.utils.book_new();
 
@@ -173,6 +197,15 @@ export class ReporteComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
 
     //Para poder descargar el archivo exel
-    XLSX.writeFile(wb, 'Reporte Ventas.xlsx');
+    XLSX.writeFile(
+      wb,
+      'ReporteVentas (' +
+        _fechaInicio +
+        '-' +
+        _fechaFin +
+        ') - ' +
+        _HoraActual.toLocaleString() +
+        '.xlsx'
+    );
   }
 }
