@@ -1,7 +1,9 @@
 //Maneja toda la logica de la pagina min 18.40 parte 9
 //Maneja toda la logica de incio de sesion del usuario validando los campos
-
 import { Component } from '@angular/core';
+
+//Para los iconos
+import { MatIconModule } from '@angular/material/icon';
 
 //Agregar todos los recursos que estaremos utilizando
 //Contruir y validar
@@ -19,6 +21,8 @@ import { UtilidadService } from 'src/app/Reutilizable/utilidad.service';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  // standalone: true,
+  // imports: [MatIconModule],
 })
 export class LoginComponent {
   //Variables min 19.56 parte 9

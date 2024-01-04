@@ -78,12 +78,10 @@
         <!-- Columnas con nombre especifico especificadas en (min 38.46 parte 10)-->
         <ng-container matColumnDef="precio">
           <!-- Encabezado de esta columna -->
-          <th mat-header-cell *matHeaderCellDef>Precio Q</th>
+          <th mat-header-cell *matHeaderCellDef>Precio</th>
           <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
           <!-- Mismo nombre que matColumnDef -->
-          <td mat-cell *matCellDef="let element">
-            {{ element.precio }}
-          </td>
+          <td mat-cell *matCellDef="let element">Q {{ element.precio }}</td>
         </ng-container>
 
         <!-- Columnas con nombre especifico especificadas en (min 38.46 parte 10)-->
@@ -96,17 +94,6 @@
             <!-- Condicion que cambie el color si es activo o no lo es min 01.06.44 parte 10  -->
             {{ element.esActivo == 1 ? "Activo" : "Inactivo" }}
           </td>
-
-          <!-- <td
-            mat-cell
-            *matCellDef="let element"
-            [ngClass]="{
-              'text-red': element.esActivo == '1',
-              'text-green': element.esActivo == '0'
-            }"
-          >
-            {{ element.esActivo == 1 ? "Activo" : "Inactivo" }}
-          </td> -->
         </ng-container>
 
         <!-- Columna de acciones min 31.48 parte 11 -->
