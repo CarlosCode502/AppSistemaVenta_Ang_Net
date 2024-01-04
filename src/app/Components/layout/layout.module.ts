@@ -19,8 +19,10 @@ import { ModalUsuarioComponent } from './Modales/modal-usuario/modal-usuario.com
 import { ModalProductoComponent } from './Modales/modal-producto/modal-producto.component';
 import { ModalDetalleVentaComponent } from './Modales/modal-detalle-venta/modal-detalle-venta.component';
 
-//Este layout.module.ts solo va a pertenecer a la carpeta layout únicamente min 15.42 parte 8
+//Para utilizar iconos (agregado teniendo finalizado el proyecto 03/01/2024)
+import { MatIconModule } from '@angular/material/icon';
 
+//Este layout.module.ts solo va a pertenecer a la carpeta layout únicamente min 15.42 parte 8
 @NgModule({
   declarations: [
     //Aquí estan declarados con el nombre+component min 19.07 parte 8
@@ -39,6 +41,8 @@ import { ModalDetalleVentaComponent } from './Modales/modal-detalle-venta/modal-
     LayoutRoutingModule,
     //Importar el modulo que contiene todos los componentes de diseño (interfaz) min 29.14 parte 8
     SharedModule,
+    //Iconos de angular
+    MatIconModule,
   ],
 })
 export class LayoutModule {}
