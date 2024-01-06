@@ -33,6 +33,9 @@ import Swal from 'sweetalert2';
 export class UsuarioComponent implements OnInit, AfterViewInit {
   //Creando las variables a utilizar min 38.32 parte 10
 
+  //#-- Contiene el correo del usuario para validar si coincide o no para eliminarlo
+  correoUsuario: string = '';
+
   //Columnas que va a tener las tablas titulos min 38.46 parte 10
   //En acciones irán los botones editar/eliminar
   columnasTabla: string[] = [
@@ -187,31 +190,47 @@ export class UsuarioComponent implements OnInit, AfterViewInit {
       .then((resultado) => {
         //Si resultado es afirmativo o confirmado
         if (resultado.isConfirmed) {
-          //Se accede al usuario servicio y se ejecuta el método eliminar pasandole el idusuario obtenido aqui
-          this._usuarioServicio.Eliminar(usuario.idUsuario).subscribe({
-            //Lo siguiente es obtener la respuesta si el estatus es correcto
-            next: (data) => {
-              if (data.status) {
-                //Se envia una alerta de exitoso
-                this._utilidadServicio.mostrarAlerta(
-                  'El usuario fue eliminado',
-                  'Listo!'
-                );
-                //Luego se vuelven a cargar los usuarios
-                this.obtenenrUsuarios();
-              }
-              //Si no es exitoso
-              else {
-                //Igual se muestra una alerta de que no se pudo guardar min 55.20 parte 10
-                this._utilidadServicio.mostrarAlerta(
-                  'No se pudo eliminar el usuario',
-                  'Error'
-                );
-              }
-            },
-            //Si ocurre algun error se muestra min 55.34 parte 10
-            error: (e) => {},
-          });
+          //#--verificamos que los datos del usuario no correspondan al de la sesion
+          const usuarioSesion = this._utilidadServicio.obtenerSesionUsuario();
+
+          //#-- El valor del campo pasa a tener el correo de sesion
+          this.correoUsuario = usuarioSesion.correo;
+
+          //#-- Se compara si el usuario seleccionado es distinto al de la sesion se procede a eliminar
+          if (usuario.correo != this.correoUsuario) {
+            //Se accede al usuario servicio y se ejecuta el método eliminar pasandole el idusuario obtenido aqui
+            this._usuarioServicio.Eliminar(usuario.idUsuario).subscribe({
+              //Lo siguiente es obtener la respuesta si el estatus es correcto
+              next: (data) => {
+                if (data.status) {
+                  //Se envia una alerta de exitoso
+                  this._utilidadServicio.mostrarAlerta(
+                    'El usuario fue eliminado',
+                    'Listo!'
+                  );
+                  //Luego se vuelven a cargar los usuarios
+                  this.obtenenrUsuarios();
+                }
+                //Si no es exitoso
+                else {
+                  //Igual se muestra una alerta de que no se pudo guardar min 55.20 parte 10
+                  this._utilidadServicio.mostrarAlerta(
+                    'No se pudo eliminar el usuario',
+                    'Error'
+                  );
+                }
+              },
+              //Si ocurre algun error se muestra min 55.34 parte 10
+              error: (e) => {},
+            });
+          }
+          //#-- Si es igual al de la sesion se muestra un msj de error
+          else {
+            this._utilidadServicio.mostrarAlerta(
+              'No se pudo eliminar el usuario con el que se incio sesion',
+              'Error'
+            );
+          }
         }
       });
   }
