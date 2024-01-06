@@ -130,6 +130,8 @@ export class ModalUsuarioComponent implements OnInit {
     //Válida para poder guardar el usuario min 17.53 parte 10
     //Si es igual a nulo
     if (this.datosUsuario == null) {
+      //Agregando validación para inpedir que se guarde un usuario existente
+
       //Entonces se creará un nuevo usuario
       this._usuarioServicio.Guardar(_usuario).subscribe({
         //Ejecuta una ejecución que funciona como una respuesta o error

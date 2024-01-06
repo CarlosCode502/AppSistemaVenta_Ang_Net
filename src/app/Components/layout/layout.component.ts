@@ -25,6 +25,9 @@ export class LayoutComponent implements OnInit {
   //Contendrá el rol del usuario
   rolUsuario: string = '';
 
+  //Contendrá el estado del usuario (Activo/Inactivo)
+  estadoUsuario: string = '';
+
   //Inyectando las dependencias del proyecto min 02.10 parte 16
   constructor(
     //Contiene una def para el ruteo
@@ -47,6 +50,13 @@ export class LayoutComponent implements OnInit {
       this.correoUsuario = usuario.correo;
       //Asignamos el rol del usuario
       this.rolUsuario = usuario.rolDescripcion;
+      //Asignamos el estado del usuario
+      this.estadoUsuario = usuario.esActivo;
+
+      console.log(this.estadoUsuario);
+      // if(this.estadoUsuario === 'Activo'){
+
+      // }
 
       //Obtenemos el listado de usuarios del método en (min 40.38 parte 7)
       //Y le mandamos el id del usuario recien obtenido
