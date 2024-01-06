@@ -6,4 +6,6 @@ export interface Sesion {
   nombreCompleto: string;
   correo: string;
   rolDescripcion: string;
+  //#--Para obtener el estado del usuario
+  esActivo: number;
 }

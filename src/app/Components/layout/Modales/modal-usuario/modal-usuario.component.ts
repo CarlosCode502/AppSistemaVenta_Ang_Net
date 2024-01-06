@@ -40,8 +40,7 @@ export class ModalUsuarioComponent implements OnInit {
   //Contiene el listado de roles (arreglo de valor 0)
   listaRoles: Rol[] = [];
 
-  //#-- Agregado intentando evitar que el usuario creé un existente
-
+  //#-- Agregado intentando evitar que el usuario creé un existente 06/01/2024 antes de 02.00 pm
   //#-- Var que contiene los datos de los usuarios (solo para inicializar valores)
   dataInicio: Usuario[] = [];
 
@@ -62,7 +61,7 @@ export class ModalUsuarioComponent implements OnInit {
     //Ref del usuario service
     private _usuarioServicio: UsuarioService,
     //Ref a la var utilidad service
-    private _utilidadServicio: UtilidadService //Fin min 08.07 parte 10 //Def para obtener los usuarios existentes // private _listadoUsuarios: UsuarioComponent
+    private _utilidadServicio: UtilidadService //Fin min 08.07 parte 10
   ) {
     //Declarando campos del fórmulario min 08.12 parte 10
 
@@ -145,6 +144,7 @@ export class ModalUsuarioComponent implements OnInit {
         clave: this.datosUsuario.clave,
         esActivo: this.datosUsuario.esActivo,
       });
+      console.log(this.datosUsuario.correo);
     }
   }
 
@@ -163,22 +163,23 @@ export class ModalUsuarioComponent implements OnInit {
       rolDescripcion: '',
       clave: this.formularioUsuario.value.clave,
       //Recibe un int y se manda un string (necesita conversion) min 17.14 parte 10
-      esActivo: parseInt(this.formularioUsuario.value.esActivo),
+      esActivo: this.formularioUsuario.value.esActivo,
     };
 
-    //#-- Agregando validación para inpedir que se guarde un usuario existente
-    if (this.dataListaUsuarios.find((p) => p.correo === _usuario.correo)) {
-      // console.log(
-      //   this.dataListaUsuarios.find((p) => p.correo === _usuario.correo)
-      // );
-      this._utilidadServicio.mostrarAlerta(
-        'Ya existe un usuario con el mismo correo',
-        'Error'
-      );
-    } else {
-      //Válida para poder guardar el usuario min 17.53 parte 10
-      //Si es igual a nulo
-      if (this.datosUsuario == null) {
+    //Válida para poder guardar el usuario min 17.53 parte 10
+    //Si es igual a nulo
+    if (this.datosUsuario == null) {
+      //#-- Agregando validación para inpedir que se guarde un usuario existente
+      //Se verifica en el listado de usuarios si algun campo correo coincide con el ingresado
+      if (this.dataListaUsuarios.find((p) => p.correo === _usuario.correo)) {
+        // console.log(
+        //   this.dataListaUsuarios.find((p) => p.correo === _usuario.correo)
+        // );
+        this._utilidadServicio.mostrarAlerta(
+          'Ya existe un usuario con el mismo correo',
+          'Error'
+        );
+      } else {
         //Entonces se creará un nuevo usuario
         this._usuarioServicio.Guardar(_usuario).subscribe({
           //Ejecuta una ejecución que funciona como una respuesta o error
@@ -202,8 +203,17 @@ export class ModalUsuarioComponent implements OnInit {
             }
           },
         });
-        //Se ejecuta la logica para poder editar el usuario
-      } else {
+      } //#-- Cierre de validacion si el correo del usuario ya existe
+      //Se ejecuta la logica para poder editar el usuario
+    } else {
+      //#-- Otra lógica para validar si existe el correo 06/01/2024 a las de 02.15 pm
+      //Obtenemos el correo de la ventana editar
+      // const valorCorreoEditar = _usuario.correo;
+      // console.log(valorCorreoEditar);
+      //Primero se valida si el correo no se cambio
+      if (_usuario.correo === this.datosUsuario.correo) {
+        //#--Entonces que se edite
+
         //Si el usuario no es nulo es porque se editara un usuario
         //(subscribe guarda info del usuario) min 21.30 parte 10
         this._usuarioServicio.Editar(_usuario).subscribe({
@@ -229,6 +239,15 @@ export class ModalUsuarioComponent implements OnInit {
           },
         });
       }
-    } //#-- Cierre de validacion si el correo del usuario ya existe
+      //#--Sino que me diga que ya existe un usuario con es correo
+      else if (
+        this.dataListaUsuarios.find((p) => p.correo === _usuario.correo)
+      ) {
+        this._utilidadServicio.mostrarAlerta(
+          'Ya existe un usuario con el mismo correo',
+          'Error'
+        );
+      }
+    }
   }
 }

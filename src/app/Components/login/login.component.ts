@@ -1,6 +1,5 @@
 //Maneja toda la logica de la pagina min 18.40 parte 9
 //Maneja toda la logica de incio de sesion del usuario validando los campos
-
 import { Component } from '@angular/core';
 
 //Agregar todos los recursos que estaremos utilizando
@@ -28,6 +27,9 @@ export class LoginComponent {
   //Mostrar un loading
   mostrarLoading: boolean = false;
 
+  //#-- Obtiene el estado de la sesion
+  estadoSesionUsuario: number = 0;
+
   //Inyectar las dependencias en el constructor min 20.43 parte 9
   constructor(
     //Para construir los campos dentro del formulario
@@ -53,12 +55,16 @@ export class LoginComponent {
     //Se muestra la animación de carga
     this.mostrarLoading = true;
 
+    //#--verificamos que los datos del usuario no correspondan al de la sesion
+    // const usuarioSesion = this._utilidadServicio.obtenerSesionUsuario();
+
     //Modelo que se va a enviar a la api para la validación del login min 23.30 parte 9
     const request: Login = {
       //Recibe un correo del campo email (propiedad del modelo o comp login.ts (Interfaces))
       correo: this.formularioLogin.value.email,
       //Recibe una clave del campo password (propiedad del modelo o comp login.ts (Interfaces))
       clave: this.formularioLogin.value.password,
+      //#-- Recibe el estado activo o inactivo
     };
 
     //Ejecuta este método iniciar con un rq (es necesario subscribirse para obtener la resp)
@@ -66,12 +72,37 @@ export class LoginComponent {
       //Devuelve la respuesta en caso de ser exitoso o no
       next: (data) => {
         //Si la respuesta es true (ha encontrado un usuario con esas credenciales)
+        // console.log(data);
+
         if (data.status) {
           //status = true
           //Si existe un usuario se ejecuta el método y se guardan las credenciales en memoria del nav
           this._utilidadServicio.guardarSesionUsuario(data.value);
-          //Para navegar o redirigir luego de registro exitoso (navega a la pag de inicio menu)
-          this.router.navigate(['pages']);
+
+          //Obtiene los datos del usuario que ha iniciado sesión
+          const _sesionUsuario = this._utilidadServicio.obtenerSesionUsuario();
+
+          //Obtiene el estado del usuario logeado
+          this.estadoSesionUsuario = _sesionUsuario.esActivo;
+
+          // console.log(this.estadoSesionUsuario);
+
+          //Obtiene y verifica si existe una opción según el estado
+          switch (this.estadoSesionUsuario) {
+            case 1:
+              //Para navegar o redirigir luego de registro exitoso (navega a la pag de inicio menu)
+              this.router.navigate(['pages/dashboard']);
+              break;
+
+            //Caso por defecto
+            default:
+              this._utilidadServicio.mostrarAlerta(
+                'No es posible acceder con este usuario',
+                'Usuario Inactivo!'
+              );
+              this._utilidadServicio.eliminarSesionUsuario();
+              break;
+          }
         } else {
           //Si no existe el usuario (se muestra una alerta de error
           this._utilidadServicio.mostrarAlerta(
