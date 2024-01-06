@@ -20,15 +20,15 @@ export class UtilidadService {
     //Abre un acceso al componente
     this._snackBar.open(mensaje, tipo, {
       //Se va a usar la dirección horizontal y se va a mostrar al fondo
-      horizontalPosition: 'end',
+      horizontalPosition: 'center',
       //De manera vertical al inicio
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       //Se va mostrar durante 3s
       duration: 4000,
     });
   }
 
-  // //Agregado extra
+  // // //Agregado extra
   // alertaExitosa(mensaje: string, tipo: string) {
   //   //Abre un acceso al componente
   //   this._snackBar.open(mensaje, tipo, {

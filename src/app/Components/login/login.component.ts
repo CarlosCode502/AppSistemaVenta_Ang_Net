@@ -109,6 +109,7 @@ export class LoginComponent {
             'Las credenciales no coinciden con un usuario existente',
             'Opss!'
           );
+          // this.mostrarLoading = false;
         }
       },
       //Evento de complete que se ejecuta luego de una solicitud min 26.30 parte 9
