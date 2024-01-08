@@ -71,7 +71,7 @@ export class ModalUsuarioComponent implements OnInit {
       correo: ['', Validators.required],
       idRol: ['', Validators.required],
       clave: ['', Validators.required],
-      esActivo: ['', Validators.required],
+      esActivo: ['1', Validators.required], //#-- Faltaba definir el uno para mostrar el valor seleccionado
     });
 
     //Modificar el texto si se esta recibiendo información del usuario min 09.45 parte 10
@@ -142,7 +142,7 @@ export class ModalUsuarioComponent implements OnInit {
         correo: this.datosUsuario.correo,
         idRol: this.datosUsuario.idRol,
         clave: this.datosUsuario.clave,
-        esActivo: this.datosUsuario.esActivo,
+        esActivo: this.datosUsuario.esActivo.toString(), //#-- faltaba el .toString()
       });
       console.log(this.datosUsuario.correo);
     }
