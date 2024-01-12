@@ -30,6 +30,9 @@ import Swal from 'sweetalert2';
 })
 export class VentaComponent {
   //Variables 02.20 parte 12
+
+  //#-- Listado de productos con stock 0
+
   //Va a contener un arreglo de todos los productos
   listaProductos: Producto[] = [];
   //Búsqueda
@@ -100,6 +103,23 @@ export class VentaComponent {
       cantidad: ['', Validators.required],
     });
 
+    //#-- Ejecutamos el método obtener productos activos y con stock 07/01/2024 07.42pm
+    this.obtenerProductosActivosYStockMayorACero();
+
+    //Evento que obtiene los productos cuando se realiza una búsqueda por caracter min 14.10 parte
+    //Obtener el campo producto cuando cambien los valores (valueChanges)
+    this.formularioProductoVenta
+      .get('producto')
+      ?.valueChanges.subscribe((value) => {
+        //Contendrá la lista de productos que coincidan con el filtro
+        //listaProductoFiltro(Se va a mostrar al usuario para que elija lo que desee)
+        this.listaProductoFiltro = this.retornarProductosPorFiltro(value);
+      });
+  }
+
+  //#-- Se creo este método para obtener todos los productos se podra llamar luego de agregar 07/01/2024 07.41pm
+  //#-- (No se debe quitar sino no se cargan los productos) 08/01/2024 08.47am
+  obtenerProductosActivosYStockMayorACero() {
     //Obtener los productos para mostrar el desplegable min 12.28 parte 12
     //Con subscribe obtenemos la información del usuario
     this._productoServicio.Lista().subscribe({
@@ -120,16 +140,6 @@ export class VentaComponent {
       //En caso contrario se muestra un error
       error: (e) => {},
     });
-
-    //Evento que obtiene los productos cuando se realiza una búsqueda por caracter min 14.10 parte
-    //Obtener el campo producto cuando cambien los valores (valueChanges)
-    this.formularioProductoVenta
-      .get('producto')
-      ?.valueChanges.subscribe((value) => {
-        //Contendrá la lista de productos que coincidan con el filtro
-        //listaProductoFiltro(Se va a mostrar al usuario para que elija lo que desee)
-        this.listaProductoFiltro = this.retornarProductosPorFiltro(value);
-      });
   }
 
   //Evento para mostrar el producto seleccionado por medio del campo de búsqueda min 15.40 parte 12
@@ -150,116 +160,77 @@ export class VentaComponent {
 
   //Método para agregar el producto elegido o seleccionado para proceder a la venta min 17.12 parte 12
   agregarProductoParaVenta() {
-    //Variable que obtiene el id del producto seleccionado
-    // const _idProductoSelec: number = 0;
+    //#-- Obtenemos todos los productos (aún no resta productos del stock) 08/01/2024
+    // this.obtenerProductosActivosYStockMayorACero();
+    // this.productoParaVenta(this.productoSeleccionado.stock);
 
+    //#-- Obtenemos los datos del producto seleccionado 08/01/2024
     //Representa al valor del campo cantidad del formularioProducto venta en (min 06.35 parte 12)
     let _cantidad: number = this.formularioProductoVenta.value.cantidad;
     //Representa el valor del campo precio del productoSeleccionado
-    const _precio: number = parseFloat(this.productoSeleccionado.precio);
+    let _precio: number = parseFloat(this.productoSeleccionado.precio);
     //Representa el valor del campo total (op de cant * precio)
-    const _total: number = _cantidad * _precio;
+    let _total: number = _cantidad * _precio;
     //Contiene el total de todos los productos
     this.totalPagar = this.totalPagar + _total;
 
-    // if (this.listaProductosParaVenta.length > 0) {
-    //   let _productoListaExiste = this.listaProductosParaVenta.find(
-    //     (p) => p.idProducto == this.productoSeleccionado.idProducto
-    //   );
+    //#-- Al agregar el producto se válida si la cantidad es mayor al stock dispon
 
-    //   if (_productoListaExiste) {
-    //     _productoListaExiste.cantidad += _cantidad;
+    // //#-- Valida si la cantidad del producto seleccionado no es mayor al stock actual 07/01/2024 18.57 pm
+    // //#-- Si la cantidad es menor al producto en stock se seguíra con la venta 07/01/2024 18.57 pm
+    if (_cantidad <= this.productoSeleccionado.stock) {
+      //Actualizamos los productos seleccionados para la venta min 19.09 parte 12
+      //Especificamos las propiedades correspondientes a I detalle-venta
+      this.listaProductosParaVenta.push({
+        idProducto: this.productoSeleccionado.idProducto,
+        descripcionProducto: this.productoSeleccionado.nombreProducto,
+        cantidad: _cantidad,
+        precioTexto: String(_precio.toFixed(2)),
+        totalTexto: String(_total.toFixed(2)),
+      });
 
-    //     this.listaProductosParaVenta.pop();
-    //   }
-    // }
+      //Actualizamos la tabla de productos vendidos (VERIFICAR) min 20.42 parte 12
+      //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
+      this.datosDetalleVenta = new MatTableDataSource(
+        this.listaProductosParaVenta
+      );
 
-    // //Verifica si existe algún elemento dentro del arreglo
-    // if (this.listaProductosParaVenta.length > 0) {
-    //   //Verifica si el producto seleccionado se encuentra dentro del listado de productos para venta
-    //   if (
-    //     this.listaProductosParaVenta.find(
-    //       (p) => p.idProducto === this.productoSeleccionado.idProducto
-    //     )
-    //   ) {
-    //     //si es afirmativo se obtiene la cantidad del producto existente
-    //     //se obtiene el producto
-    //     const _cantidadDeExistente = this.listaProductosParaVenta.find((p) =>
-    //       p.idProducto === this.productoSeleccionado.idProducto
-    //         ? p.cantidad
-    //         : ''
-    //     );
+      //Para restablecer el formulario min 21.03 parte 12
+      this.formularioProductoVenta.patchValue({
+        producto: '',
+        cantidad: '',
+      });
+    }
+    //#-- Si cantidad es mayor al stock del producto se muestra un msj de alerta 07/01/2024
+    else {
+      //#-- Alerta que se muestra si la cantidad es mayor al stock de ese producto
+      Swal.fire({
+        icon: 'warning',
+        title: 'Producto con pocas unidades',
+        text: `Solo quedan ${this.productoSeleccionado.stock} en stock.`,
+        // color: 'skyblue',
+      });
 
-    //     console.log(
-    //       'el valor de cantidadExiste es' + _cantidadDeExistente?.cantidad
-    //     );
-    //   }
-    // }
-
-    //Actualizamos los productos seleccionados para la venta min 19.09 parte 12
-    //Especificamos las propiedades correspondientes a I detalle-venta
-    this.listaProductosParaVenta.push({
-      idProducto: this.productoSeleccionado.idProducto,
-      descripcionProducto: this.productoSeleccionado.nombreProducto,
-      cantidad: _cantidad,
-      precioTexto: String(_precio.toFixed(2)),
-      totalTexto: String(_total.toFixed(2)),
-    });
-
-    //Actualizamos la tabla de productos vendidos (VERIFICAR) min 20.42 parte 12
-    //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
-    this.datosDetalleVenta = new MatTableDataSource(
-      this.listaProductosParaVenta
-    );
-
-    //Para restablecer el formulario min 21.03 parte 12
-    this.formularioProductoVenta.patchValue({
-      producto: '',
-      cantidad: '',
-    });
-
-    // _idProductoSelec: this.productoSeleccionado.idProducto;
-  }
-
-  //Método para poder editar un usuario al momento de hacer clic en dicho btn min 48.48 parte 10
-  //Recibe como parametro un usuario
-  editarUsuario(producto: Producto) {
-    // //Se utiliza al dialog para que ejecute o abra el modal usuario
-    // this.dialog
-    //   //Tambien puede recibir datos del usuario
-    //   .open(ModalUsuarioComponent, {
-    //     //Para evitar que el modal se cierre si el usuario hace click fuera de este
-    //     disableClose: true,
-    //     data: usuario, //Le pasamos el usuario
-    //   })
-    //   //Se ejecuta luego de cerrar se obtiene un resultado (que se envia en min 19.25 parte 10)
-    //   .afterClosed()
-    //   .subscribe((resultado) => {
-    //     //Valida si el resultado es igual a true
-    //     if (resultado === 'true') {
-    //       //Se ejecuta el método obtener usuarios (actualiza la tabla)
-    //       this.obtenenrUsuarios();
-    //     }
-    //   });
+      //#-- Verificamos si no existe algun otro producto en el listado paraventa 08/01/2024 09.30pm
+      if (this.listaProductosParaVenta.length < 0) {
+        //#-- Restablecemos el valor de los campos
+        _cantidad = 0;
+        _precio = 0;
+        _total = 0;
+        this.totalPagar = 0;
+      }
+      //#Sino solo se resta el total de productos a pagar
+      else {
+        this.totalPagar = this.totalPagar - _total;
+      }
+    }
   }
 
   //Método para poder eliminar un producto seleccionado en la listaParaVenta min 21.40 parte 12
   //Recibe un modeloDetalleVenta
   eliminarProducto(detalle: DetalleVenta) {
-    //Actualizamos el total a pagar restando el valor del producto eliminado
-    (this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto)),
-      //Se va a actualizar productosParaVenta desde el filtro
-      //Se retornan los productos que no coincidan con el id del producto a eliminar
-      (this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
-        (p) =>
-          p.idProducto != detalle.idProducto &&
-          this.totalPagar - parseFloat(detalle.totalTexto)
-      ));
-
-    //Se
-
-    //Actualizamos la tabla de productos vendidos min 23.09 parte 12
-    //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
+    // OBTENER LA POSICION DEL PRODUCTO SELECCIONADO DE LISTAPRODUCTOSPARAVENTE
+    // Y DEVOLVER EL LISTADO QUITANDO ESA POSICION
 
     //Si la cantidad de elementos de la lista es menor o igual a cero
     //Restablecemos el valor del campo y actualizamos el listatabla
@@ -271,6 +242,18 @@ export class VentaComponent {
         this.listaProductosParaVenta
       );
     } else {
+      //Actualizamos el total a pagar restando el valor del producto eliminado
+      this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto);
+      //Se va a actualizar productosParaVenta desde el filtro
+      //Se retornan los productos que no coincidan con el id del producto a eliminar
+      this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
+        (p) =>
+          p.idProducto != detalle.idProducto &&
+          this.totalPagar - parseFloat(detalle.totalTexto)
+      );
+
+      //Actualizamos la tabla de productos vendidos min 23.09 parte 12
+      //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
       this.datosDetalleVenta = new MatTableDataSource(
         this.listaProductosParaVenta
       );
@@ -294,6 +277,10 @@ export class VentaComponent {
         totalTexto: String(this.totalPagar.toFixed(2)), //Convertir y solo 2 decimales
         tblDetalleVenta: this.listaProductosParaVenta,
       };
+
+      //#-- Verificamos si dentro de la lista productos para la venta existe un producto que dicha
+      //cantidad supere a la que se encuentra en stock
+      // if(this.listaProductosParaVenta.find(c => c.cantidad && this.listaProductos.find(p => p.stock)))
 
       //Se va a registrar la venta min 25.12 parte 12
       this._ventaServicio.Registrar(request).subscribe({
