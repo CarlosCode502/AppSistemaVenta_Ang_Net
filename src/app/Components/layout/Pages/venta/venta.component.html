@@ -42,13 +42,22 @@
             >
               <!-- Serie de opciones -->
               <!-- Itera el listado de productos que cumplan con el filtro -->
+
               <mat-option
                 *ngFor="let option of listaProductoFiltro"
                 [value]="option"
               >
-                {{ option.nombreProducto }}
-                <div style="color: rgb(28, 11, 173); margin-bottom: 10px">
-                  {{ " Q " + option.precio }}
+                <div id="sameLine">
+                  {{ option.nombreProducto }}
+
+                  <div style="color: rgb(28, 11, 173)">
+                    Q {{ option.precio }}
+                    <!-- </div> -->
+                  </div>
+
+                  <div style="color: #ff4786; padding-bottom: 20px">
+                    En stock: {{ option.stock }}
+                  </div>
                 </div>
               </mat-option>
             </mat-autocomplete>
@@ -182,11 +191,7 @@
           <td mat-cell *matCellDef="let element">
             <!-- Agregamos el botón de la accion eliminar o quitra producto de listaventa min 50.52 parte 12 -->
             <!-- Botón que contiene o ejecuta el método editar usuario recibe un (element = id usuario) -->
-            <button
-              mat-icon-button
-              color="primary"
-              (click)="editarUsuario(element)"
-            >
+            <button mat-icon-button color="primary" (click)="(element)">
               <!-- Icono que no tiene texto -->
               <mat-icon>edit</mat-icon>
             </button>

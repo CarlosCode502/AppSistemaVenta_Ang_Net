@@ -239,15 +239,42 @@ export class ModalUsuarioComponent implements OnInit {
           },
         });
       }
-      //#--Sino que me diga que ya existe un usuario con es correo
-      else if (
-        this.dataListaUsuarios.find((p) => p.correo === _usuario.correo)
-      ) {
-        this._utilidadServicio.mostrarAlerta(
-          'Ya existe un usuario con el mismo correo',
-          'Error'
-        );
-      }
-    }
+      //#-- Se verifica si el correo es distinto que no coincida con uno existente 10/01/2024 16.50
+      else {
+        //#--Sino que me diga que ya existe un usuario con ese correo
+        if (!this.dataListaUsuarios.find((p) => p.correo === _usuario.correo)) {
+          //#--Entonces que se edite
+          //Si el usuario no es nulo es porque se editara un usuario
+          //(subscribe guarda info del usuario) min 21.30 parte 10
+          this._usuarioServicio.Editar(_usuario).subscribe({
+            //Ejecuta una ejecución que funciona como una respuesta o error
+            next: (data) => {
+              if (data.status) {
+                //Luego de editar el usuario se otendra el status (se envia el msj exitoso)
+                this._utilidadServicio.mostrarAlerta(
+                  'El usuario fue editado',
+                  'Exito'
+                );
+                //Luego de editar el usuario se debera cerrar este modal
+                //se envia un valor al btn que activa o muestra este formulario min 21.30 parte 10
+                //Retorna el valor de true al cerrase el modal al boton que lo abre
+                this.modalActual.close('true');
+              } else {
+                //Si no se pudo editar entonces se mostrara una alerta de error min 21.45 parte 10
+                this._utilidadServicio.mostrarAlerta(
+                  'No se pudo editar el usuario',
+                  'Error'
+                );
+              }
+            },
+          });
+        } else {
+          this._utilidadServicio.mostrarAlerta(
+            'Ya existe un usuario con el mismo correo',
+            'Error'
+          );
+        }
+      } //#-- Cierre de else cuando el correo no es === 11/01/2024 17.58
+    } //#-- Cierre de else cuando se va a editar el usuario 11/01/2024 17.58
   }
 }
