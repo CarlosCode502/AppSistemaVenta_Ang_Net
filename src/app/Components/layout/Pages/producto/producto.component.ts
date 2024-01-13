@@ -20,6 +20,7 @@ import { UtilidadService } from 'src/app/Reutilizable/utilidad.service';
 
 //Agregando o utilizando SweetAlert2 (para mostrar alertas personalizadas) min 21.28 parte 11
 import Swal from 'sweetalert2';
+import { find } from 'rxjs';
 
 @Component({
   selector: 'app-producto',
@@ -70,8 +71,43 @@ export class ProductoComponent implements OnInit, AfterViewInit {
       next: (data) => {
         //Si la data status el correcto
         if (data.status) {
+          //#-- Válida si un producto tiene stock menor o igual a cero (<= 0) 11/01/2024 18.44pm
+
+          // for (let index = 0; index < data.value.length; index++) {
+          //   const element = data.value[index];
+
+          //   if (element.stock <= 0) {
+          //     element.esActivo = 0;
+
+          // const _producto: Producto = {
+          //   //Si el id producto es nulo será cero sino va a ser el id del reg obtenido
+          //   idProducto: data.value.idProducto,
+          //   //Asigna el valor a la propiedad NP desde el formulario y el campo nombre producto
+          //   //Propiedad: obtiene del formulario el valor del campo (igual para los demás)
+          //   nombreProducto: data.value.nombreProducto,
+          //   idCategoria: data.value.idCategoria,
+          //   //No necesitamos asignar un descCategoria por ahora
+          //   descripcionCategoria: data.value.descripcionCategoria,
+          //   //Se cambio a string (se evita el error bad request 400) BAD REQUEST
+          //   //The JSON value could not be converted to System.String. Path: $.precio
+          //   precio: data.value.precio,
+          //   stock: data.value.stock <= 0 ? '0' : data.value.stock,
+          //   //Recibe un int y se manda un string (necesita conversion) min 12.01 parte 11
+          //   esActivo: data.value.esActivo === true ? 1 : 0,
+          // };
+
+          // console.log(_producto);
+          //   // this.editarProducto(_producto);
+          // } else {
+          //   element.esActivo = 1;
+          // }
+          //   data.value[index] = element;
+          // }
+
           //Accede a la lista o fuente de datos y se le asigna el valor de la lista obtenidos
           this.dataListaProductos.data = data.value; //Actualiza la fuente
+
+          // this.ngOnInit();
         }
         //En caso contrario o error
         else {

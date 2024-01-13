@@ -1,8 +1,10 @@
 // <!-- Creando páginas y componentes a partir del min 16.50 parte 8 -->
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 
 //Trabajar con los fórmularios reactivos min 00.52 parte 12
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+//Para obtener datos a través de los modales (ref de dialogos y data de dialogos)
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //Para poder trabajar con tablas
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -28,10 +30,8 @@ import Swal from 'sweetalert2';
   templateUrl: './venta.component.html',
   styleUrls: ['./venta.component.css'],
 })
-export class VentaComponent {
+export class VentaComponent implements OnInit {
   //Variables 02.20 parte 12
-
-  //#-- Listado de productos con stock 0
 
   //Va a contener un arreglo de todos los productos
   listaProductos: Producto[] = [];
@@ -117,6 +117,12 @@ export class VentaComponent {
       });
   }
 
+  //#-- Se ejecuta al iniciar  12/01/2024 19.26pm
+  ngOnInit(): void {
+    //#-- Es necesario volver a obtener los productos 12/01/2024 19.26pm
+    this.obtenerProductosActivosYStockMayorACero();
+  }
+
   //#-- Se creo este método para obtener todos los productos se podra llamar luego de agregar 07/01/2024 07.41pm
   //#-- (No se debe quitar sino no se cargan los productos) 08/01/2024 08.47am
   obtenerProductosActivosYStockMayorACero() {
@@ -149,8 +155,6 @@ export class VentaComponent {
     return producto.nombreProducto;
   }
 
-  //Evento para mostrar el precio del producto búscado
-
   //Evento para guardar temporalmente el producto seleccionado de la lista min 16.20 parte 12
   //Recibe un evento
   productoParaVenta(event: any) {
@@ -160,10 +164,6 @@ export class VentaComponent {
 
   //Método para agregar el producto elegido o seleccionado para proceder a la venta min 17.12 parte 12
   agregarProductoParaVenta() {
-    //#-- Obtenemos todos los productos (aún no resta productos del stock) 08/01/2024
-    // this.obtenerProductosActivosYStockMayorACero();
-    // this.productoParaVenta(this.productoSeleccionado.stock);
-
     //#-- Obtenemos los datos del producto seleccionado 08/01/2024
     //Representa al valor del campo cantidad del formularioProducto venta en (min 06.35 parte 12)
     let _cantidad: number = this.formularioProductoVenta.value.cantidad;
@@ -175,7 +175,6 @@ export class VentaComponent {
     this.totalPagar = this.totalPagar + _total;
 
     //#-- Al agregar el producto se válida si la cantidad es mayor al stock dispon
-
     // //#-- Valida si la cantidad del producto seleccionado no es mayor al stock actual 07/01/2024 18.57 pm
     // //#-- Si la cantidad es menor al producto en stock se seguíra con la venta 07/01/2024 18.57 pm
     if (_cantidad <= this.productoSeleccionado.stock) {
@@ -200,6 +199,11 @@ export class VentaComponent {
         producto: '',
         cantidad: '',
       });
+
+      // this.obtenerProductosActivosYStockMayorACero();
+      //#--Hace que el producto ya no se muestre seleccionado al agregarl a listaprodparaventa 12/01/24 18.1
+      //#--Si se elimina se muestra seleccionado luego de unos seg se resetea 12/01/24 19.32pm
+      this.listaProductoFiltro = [];
     }
     //#-- Si cantidad es mayor al stock del producto se muestra un msj de alerta 07/01/2024
     else {
@@ -230,34 +234,30 @@ export class VentaComponent {
   //Recibe un modeloDetalleVenta
   eliminarProducto(detalle: DetalleVenta) {
     // OBTENER LA POSICION DEL PRODUCTO SELECCIONADO DE LISTAPRODUCTOSPARAVENTE
-    // Y DEVOLVER EL LISTADO QUITANDO ESA POSICION
+    // Y DEVOLVER EL LISTADO QUITANDO ESA POSICION 11/01/2024 21.35PM
+    //obtiene la posición del elemento
+    // const indiceElemento = this.listaProductosParaVenta.indexOf(detalle);
+
+    //#-- modificado 12/01/24 12.16pm
+    //Actualizamos el total a pagar restando el valor del producto eliminado
+    this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto);
+    //Se va a actualizar productosParaVenta desde el filtro
+    //Se retornan los productos que no coincidan con el id del producto a eliminar
+    this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
+      (p) => p.idProducto != detalle.idProducto
+    );
 
     //Si la cantidad de elementos de la lista es menor o igual a cero
     //Restablecemos el valor del campo y actualizamos el listatabla
     if (this.listaProductosParaVenta.length <= 0) {
       this.totalPagar = 0;
-      //Actualizamos la tabla de productos vendidos min 23.09 parte 12
-      //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
-      this.datosDetalleVenta = new MatTableDataSource(
-        this.listaProductosParaVenta
-      );
-    } else {
-      //Actualizamos el total a pagar restando el valor del producto eliminado
-      this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto);
-      //Se va a actualizar productosParaVenta desde el filtro
-      //Se retornan los productos que no coincidan con el id del producto a eliminar
-      this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
-        (p) =>
-          p.idProducto != detalle.idProducto &&
-          this.totalPagar - parseFloat(detalle.totalTexto)
-      );
-
-      //Actualizamos la tabla de productos vendidos min 23.09 parte 12
-      //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
-      this.datosDetalleVenta = new MatTableDataSource(
-        this.listaProductosParaVenta
-      );
     }
+
+    //Actualizamos la tabla de productos vendidos min 23.09 parte 12
+    //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
+    this.datosDetalleVenta = new MatTableDataSource(
+      this.listaProductosParaVenta
+    );
   }
 
   //Método para poder registrar la venta min 23.28 parte 12
@@ -277,6 +277,11 @@ export class VentaComponent {
         totalTexto: String(this.totalPagar.toFixed(2)), //Convertir y solo 2 decimales
         tblDetalleVenta: this.listaProductosParaVenta,
       };
+
+      //#-- Verificamos si existe un producto con el mismo id 12/01/2024 17.07pm
+      //#-- Si existe obtenemos la cantidad de los productos en listaproductosparaventa
+      //#-- Válidamos si la cantidad no es mayor al stock del producto
+      // const sumaProductosde
 
       //#-- Verificamos si dentro de la lista productos para la venta existe un producto que dicha
       //cantidad supere a la que se encuentra en stock
@@ -300,6 +305,28 @@ export class VentaComponent {
               title: 'Venta Realizada!',
               text: `Número de venta: ${response.value.numeroDocumento}`,
             });
+
+            //Para restablecer el formulario min 21.03 parte 12
+            this.formularioProductoVenta.patchValue({
+              producto: '',
+              cantidad: '',
+            });
+
+            // this.listaProductos = [];
+            // this.obtenerProductosActivosYStockMayorACero();
+            // const texto: string = '';
+            // this.retornarProductosPorFiltro(texto);
+            //#-- Agregado msj 12/01/24 19.32pm
+            //Evento que obtiene los productos cuando se realiza una búsqueda por caracter min 14.10 parte
+            //Obtener el campo producto cuando cambien los valores (valueChanges)
+            this.formularioProductoVenta
+              .get('producto')
+              ?.valueChanges.subscribe((value) => {
+                // Contendrá la lista de productos que coincidan con el filtro
+                // listaProductoFiltro(Se va a mostrar al usuario para que elija lo que desee)
+                // this.listaProductoFiltro = this.retornarProductosPorFiltro(this.onInit());
+                this.ngOnInit();
+              });
           }
           //Si el status no es exitoso
           else {
@@ -312,6 +339,7 @@ export class VentaComponent {
         //Al finalizar el registro se va a desbloquear el btn registrar min 28.25 parte 12
         complete: () => {
           this.bloquearBotonRegistrar = false;
+          // this.obtenerProductosActivosYStockMayorACero();
         },
         //En caso de error usar exepciones min 28.35 parte 12
         error: (e) => {},
