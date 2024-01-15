@@ -24,6 +24,7 @@ import { DetalleVenta } from 'src/app/Interfaces/detalle-venta';
 
 //Agregando o utilizando SweetAlert2 (para mostrar alertas personalizadas) min 02.02 parte 12
 import Swal from 'sweetalert2';
+import { elements } from 'chart.js';
 
 @Component({
   selector: 'app-venta',
@@ -164,6 +165,9 @@ export class VentaComponent implements OnInit {
 
   //Método para agregar el producto elegido o seleccionado para proceder a la venta min 17.12 parte 12
   agregarProductoParaVenta() {
+    //#-- Contiene el id del producto seleccionado 14/01/2024 15.51
+    let _idProducto: number = this.productoSeleccionado.idProducto;
+
     //#-- Obtenemos los datos del producto seleccionado 08/01/2024
     //Representa al valor del campo cantidad del formularioProducto venta en (min 06.35 parte 12)
     let _cantidad: number = this.formularioProductoVenta.value.cantidad;
@@ -174,58 +178,117 @@ export class VentaComponent implements OnInit {
     //Contiene el total de todos los productos
     this.totalPagar = this.totalPagar + _total;
 
-    //#-- Al agregar el producto se válida si la cantidad es mayor al stock dispon
-    // //#-- Valida si la cantidad del producto seleccionado no es mayor al stock actual 07/01/2024 18.57 pm
-    // //#-- Si la cantidad es menor al producto en stock se seguíra con la venta 07/01/2024 18.57 pm
-    if (_cantidad <= this.productoSeleccionado.stock) {
-      //Actualizamos los productos seleccionados para la venta min 19.09 parte 12
-      //Especificamos las propiedades correspondientes a I detalle-venta
-      this.listaProductosParaVenta.push({
-        idProducto: this.productoSeleccionado.idProducto,
-        descripcionProducto: this.productoSeleccionado.nombreProducto,
-        cantidad: _cantidad,
-        precioTexto: String(_precio.toFixed(2)),
-        totalTexto: String(_total.toFixed(2)),
-      });
+    //#-- Válida si el total a pagar es menor o igual que cero 14/01/2024 18.05 pm
+    //#-- En caso de que el usuario agregué números negativos o cero
+    if (this.totalPagar <= 0) {
+      //#-- Se va a bloquear el btn registrar venta
+      this.bloquearBotonRegistrar = true;
+      //#-- El total pasará a ser 0 (si es negativo)
+      this.totalPagar = 0;
+      //#-- El liistado de productos se reseteara (Al llegar el total a 0 se queda el prod) pero se bloquea el reg
+      this.listaProductosParaVenta = [];
+    } else {
+      //#-- En caso de que el total sea mayor a 0 se habilita el btn registrar 14/01/2024
+      //#-- Y se ejecutan todas las válidaciones
+      this.bloquearBotonRegistrar = false;
 
-      //Actualizamos la tabla de productos vendidos (VERIFICAR) min 20.42 parte 12
-      //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
-      this.datosDetalleVenta = new MatTableDataSource(
-        this.listaProductosParaVenta
-      );
+      //#-- Al agregar el producto se válida si la cantidad es mayor al stock dispon
+      // //#-- Valida si la cantidad del producto seleccionado no es mayor al stock actual 07/01/2024 18.57 pm
+      // //#-- Si la cantidad es menor al producto en stock se seguíra con la venta 07/01/2024 18.57 pm
+      if (_cantidad <= this.productoSeleccionado.stock) {
+        //#-- Verfifica si el listado tiene algún producto (Ag comentario en 14/01/2024 17.15)
+        // if (this.listaProductosParaVenta.length > 0) {
+        //#-- Falta válidar si un id dentro del listado es igual al de prod selec 14/01/2024 16.55
+        //#-- Devuelve true si el producto seleccionado se encuentra en la listaproductosparaventa
+        if (
+          this.listaProductosParaVenta.find(
+            (p) => p.idProducto === this.productoSeleccionado.idProducto
+          )
+        ) {
+          //#-- Recorre el array de objetos y a través de una validación 14/01/2024 15.51 pm
+          //#-- se cambian las propiedades de los elementos exitentes en listaproductosparaventa
+          this.listaProductosParaVenta.map(function (dato) {
+            //#-- Si el id del producto que se encuentra en el listado es igual al del producto seleccionado
+            //Para agregarlo
+            if (dato.idProducto === _idProducto) {
+              //#-- Si es afirmativo se sobrescribe la cantidad (la anterior existente por la nueva ingresada)
+              dato.cantidad = dato.cantidad + _cantidad;
+              //#-- Obtiene el valor de la op multiplicacion entre la cantidad de productos por precio unitario
+              let obTotalTexto = dato.cantidad * _precio;
+              //#-- Total texto por producto (se usa la var obTotalTexto y se formatea para mostrar solo 2 decimal)
+              dato.totalTexto = obTotalTexto.toFixed(2);
+            }
 
-      //Para restablecer el formulario min 21.03 parte 12
-      this.formularioProductoVenta.patchValue({
-        producto: '',
-        cantidad: '',
-      });
+            //#-- Se retorna el nuevo listado (se sobrescribe)
+            return dato;
+          });
 
-      // this.obtenerProductosActivosYStockMayorACero();
-      //#--Hace que el producto ya no se muestre seleccionado al agregarl a listaprodparaventa 12/01/24 18.1
-      //#--Si se elimina se muestra seleccionado luego de unos seg se resetea 12/01/24 19.32pm
-      this.listaProductoFiltro = [];
-    }
-    //#-- Si cantidad es mayor al stock del producto se muestra un msj de alerta 07/01/2024
-    else {
-      //#-- Alerta que se muestra si la cantidad es mayor al stock de ese producto
-      Swal.fire({
-        icon: 'warning',
-        title: 'Producto con pocas unidades',
-        text: `Solo quedan ${this.productoSeleccionado.stock} en stock.`,
-        // color: 'skyblue',
-      });
+          // console.log('2');
+          // console.log(this.listaProductosParaVenta);
+        }
+        //#-- En caso de que el id no coincida con uno exitente es porque se va a agregar un nuevo producto
+        else {
+          //#-- Este insert es redundante ya existe abajo
+          //Actualizamos los productos seleccionados para la venta min 19.09 parte 12
+          //Especificamos las propiedades correspondientes a I detalle-venta
+          this.listaProductosParaVenta.push({
+            idProducto: this.productoSeleccionado.idProducto,
+            descripcionProducto: this.productoSeleccionado.nombreProducto,
+            cantidad: _cantidad,
+            precioTexto: String(_precio.toFixed(2)),
+            totalTexto: String(_total.toFixed(2)),
+          });
+        }
+        // } else {
+        //   //Actualizamos los productos seleccionados para la venta min 19.09 parte 12
+        //   //Especificamos las propiedades correspondientes a I detalle-venta
+        //   this.listaProductosParaVenta.push({
+        //     idProducto: this.productoSeleccionado.idProducto,
+        //     descripcionProducto: this.productoSeleccionado.nombreProducto,
+        //     cantidad: _cantidad,
+        //     precioTexto: String(_precio.toFixed(2)),
+        //     totalTexto: String(_total.toFixed(2)),
+        //   });
+        // }
+        //Actualizamos la tabla de productos vendidos (VERIFICAR) min 20.42 parte 12
+        //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
+        this.datosDetalleVenta = new MatTableDataSource(
+          this.listaProductosParaVenta
+        );
 
-      //#-- Verificamos si no existe algun otro producto en el listado paraventa 08/01/2024 09.30pm
-      if (this.listaProductosParaVenta.length < 0) {
-        //#-- Restablecemos el valor de los campos
-        _cantidad = 0;
-        _precio = 0;
-        _total = 0;
-        this.totalPagar = 0;
+        //Para restablecer el formulario min 21.03 parte 12
+        this.formularioProductoVenta.patchValue({
+          producto: '',
+          cantidad: '',
+        });
+
+        // this.obtenerProductosActivosYStockMayorACero();
+        //#--Hace que el producto ya no se muestre seleccionado al agregarl a listaprodparaventa 12/01/24 18.1
+        //#--Si se elimina se muestra seleccionado luego de unos seg se resetea 12/01/24 19.32pm
+        this.listaProductoFiltro = [];
       }
-      //#Sino solo se resta el total de productos a pagar
+      //#-- Si cantidad es mayor al stock del producto se muestra un msj de alerta 07/01/2024
       else {
-        this.totalPagar = this.totalPagar - _total;
+        //#-- Alerta que se muestra si la cantidad es mayor al stock de ese producto
+        Swal.fire({
+          icon: 'warning',
+          title: 'Producto con pocas unidades',
+          text: `Solo quedan ${this.productoSeleccionado.stock} en stock.`,
+          // color: 'skyblue',
+        });
+
+        //#-- Verificamos si no existe algun otro producto en el listado paraventa 08/01/2024 09.30pm
+        if (this.listaProductosParaVenta.length < 0) {
+          //#-- Restablecemos el valor de los campos
+          _cantidad = 0;
+          _precio = 0;
+          _total = 0;
+          this.totalPagar = 0;
+        }
+        //#Sino solo se resta el total de productos a pagar
+        else {
+          this.totalPagar = this.totalPagar - _total;
+        }
       }
     }
   }
@@ -236,16 +299,68 @@ export class VentaComponent implements OnInit {
     // OBTENER LA POSICION DEL PRODUCTO SELECCIONADO DE LISTAPRODUCTOSPARAVENTE
     // Y DEVOLVER EL LISTADO QUITANDO ESA POSICION 11/01/2024 21.35PM
     //obtiene la posición del elemento
-    // const indiceElemento = this.listaProductosParaVenta.indexOf(detalle);
+    console.log(this.listaProductosParaVenta);
+    const indiceElemento = this.listaProductosParaVenta.indexOf(detalle);
+    console.log('El indice del elemento seleccionado es: ', indiceElemento);
+
+    //#-- Válida si existe un producto con el mismo id 14/01/2024 13.34
+    // if(indiceElemento != -1){
+
+    // }
+    // this.listaProductosParaVenta.forEach(element => {
+    //   if(element.idProducto === detalle.idProducto){
+
+    //   }
+    // });
+
+    // let cantidadDeVeces = 0;
+
+    //#-- Obtener la cantidad de veces que se repite un producto en la lista
+    // this.listaProductosParaVenta.forEach((value) => {
+    //   if (value == detalle) {
+    //     cantidadDeVeces++;
+    //   }
+
+    //   console.log(value.descripcionProducto, 'Se repite ', cantidadDeVeces);
+    // });
 
     //#-- modificado 12/01/24 12.16pm
     //Actualizamos el total a pagar restando el valor del producto eliminado
     this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto);
+
     //Se va a actualizar productosParaVenta desde el filtro
     //Se retornan los productos que no coincidan con el id del producto a eliminar
     this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
       (p) => p.idProducto != detalle.idProducto
     );
+
+    //#-- El nuevo valor del array sera menos el indice del elemento seleccionado 14/01/2024 12.33
+    //#-- El producto seleccionado es el único que queda
+    //#-- Los iguales se quitan
+    // this.listaProductosParaVenta = this.listaProductosParaVenta.splice(
+    //   indiceElemento,
+    //   indiceElemento
+    // );
+    // this.listaProductosParaVenta = this.listaProductosParaVenta.splice(
+    //   indiceElemento,
+    //   1
+    // );
+
+    // let contador = {};
+
+    // this.listaProductosParaVenta.forEach((n) => {
+    //   n.idProducto == detalle.idProducto === true ? '': ''
+    // });
+
+    // console.log('El nuevo valor es:');
+    // console.log(this.listaProductosParaVenta);
+
+    // for (let index = 0; index < this.listaProductosParaVenta.length; index++) {
+    //   const element = this.listaProductosParaVenta[index];
+
+    //   if(element. != indiceElemento )
+
+    // }
 
     //Si la cantidad de elementos de la lista es menor o igual a cero
     //Restablecemos el valor del campo y actualizamos el listatabla
@@ -271,7 +386,7 @@ export class VentaComponent implements OnInit {
 
       //Contiene una solicitud de venta min 24.15 parte 12
       //Se va a enviar a la API este objeto
-      const request: Venta = {
+      let request: Venta = {
         //Propiedades necesarias en Venta
         tipoPago: this.tipodePagoPorDefecto,
         totalTexto: String(this.totalPagar.toFixed(2)), //Convertir y solo 2 decimales
