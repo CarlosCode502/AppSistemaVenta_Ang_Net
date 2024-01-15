@@ -196,8 +196,15 @@ export class VentaComponent implements OnInit {
       // //#-- Valida si la cantidad del producto seleccionado no es mayor al stock actual 07/01/2024 18.57 pm
       // //#-- Si la cantidad es menor al producto en stock se seguíra con la venta 07/01/2024 18.57 pm
       if (_cantidad <= this.productoSeleccionado.stock) {
-        //#-- Verfifica si el listado tiene algún producto (Ag comentario en 14/01/2024 17.15)
-        // if (this.listaProductosParaVenta.length > 0) {
+        //#-- Itera cada uno de los elementos del arreglo 15/01/2024 12.18pm
+        //#-- Como ya se válido que la cantidad ingresada no es menor al stock existente
+        //#-- Luego
+        // this.listaProductoFiltro.map(function (data) {
+        //   data.stock = data.stock - _cantidad;
+
+        //   return data;
+        // });
+
         //#-- Falta válidar si un id dentro del listado es igual al de prod selec 14/01/2024 16.55
         //#-- Devuelve true si el producto seleccionado se encuentra en la listaproductosparaventa
         if (
@@ -218,7 +225,6 @@ export class VentaComponent implements OnInit {
               //#-- Total texto por producto (se usa la var obTotalTexto y se formatea para mostrar solo 2 decimal)
               dato.totalTexto = obTotalTexto.toFixed(2);
             }
-
             //#-- Se retorna el nuevo listado (se sobrescribe)
             return dato;
           });
@@ -228,7 +234,6 @@ export class VentaComponent implements OnInit {
         }
         //#-- En caso de que el id no coincida con uno exitente es porque se va a agregar un nuevo producto
         else {
-          //#-- Este insert es redundante ya existe abajo
           //Actualizamos los productos seleccionados para la venta min 19.09 parte 12
           //Especificamos las propiedades correspondientes a I detalle-venta
           this.listaProductosParaVenta.push({
@@ -250,24 +255,24 @@ export class VentaComponent implements OnInit {
         //     totalTexto: String(_total.toFixed(2)),
         //   });
         // }
-        //Actualizamos la tabla de productos vendidos (VERIFICAR) min 20.42 parte 12
-        //a la tabla le mandamos los datos obtenidos arriba en (min 19.09 parte 12)
+
+        //Actualizamos la tabla de productos para la venta min 20.42 parte 12
+        //Agremos el nuevo producto o mostramos el modificado en (min 19.09 parte 12)
         this.datosDetalleVenta = new MatTableDataSource(
           this.listaProductosParaVenta
         );
 
-        //Para restablecer el formulario min 21.03 parte 12
+        //Para restablecer los campos del formulario min 21.03 parte 12
         this.formularioProductoVenta.patchValue({
           producto: '',
           cantidad: '',
         });
 
-        // this.obtenerProductosActivosYStockMayorACero();
         //#--Hace que el producto ya no se muestre seleccionado al agregarl a listaprodparaventa 12/01/24 18.1
         //#--Si se elimina se muestra seleccionado luego de unos seg se resetea 12/01/24 19.32pm
         this.listaProductoFiltro = [];
       }
-      //#-- Si cantidad es mayor al stock del producto se muestra un msj de alerta 07/01/2024
+      //#-- Si cantidad ingresada es mayor al stock del producto se muestra un msj de alerta 07/01/2024
       else {
         //#-- Alerta que se muestra si la cantidad es mayor al stock de ese producto
         Swal.fire({
@@ -299,9 +304,9 @@ export class VentaComponent implements OnInit {
     // OBTENER LA POSICION DEL PRODUCTO SELECCIONADO DE LISTAPRODUCTOSPARAVENTE
     // Y DEVOLVER EL LISTADO QUITANDO ESA POSICION 11/01/2024 21.35PM
     //obtiene la posición del elemento
-    console.log(this.listaProductosParaVenta);
-    const indiceElemento = this.listaProductosParaVenta.indexOf(detalle);
-    console.log('El indice del elemento seleccionado es: ', indiceElemento);
+    // console.log(this.listaProductosParaVenta);
+    // const indiceElemento = this.listaProductosParaVenta.indexOf(detalle);
+    // console.log('El indice del elemento seleccionado es: ', indiceElemento);
 
     //#-- Válida si existe un producto con el mismo id 14/01/2024 13.34
     // if(indiceElemento != -1){
@@ -333,6 +338,11 @@ export class VentaComponent implements OnInit {
     this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
       (p) => p.idProducto != detalle.idProducto
     );
+
+    // this.listaProductoFiltro.map(function (restablecer) {
+    //   restablecer.stock = restablecer.stock + detalle.cantidad;
+    //   console.log(restablecer.stock);
+    // });
 
     //#-- El nuevo valor del array sera menos el indice del elemento seleccionado 14/01/2024 12.33
     //#-- El producto seleccionado es el único que queda
@@ -399,9 +409,40 @@ export class VentaComponent implements OnInit {
     // console.log('Producto y Cantidad');
     // console.log(productosYCantidad);
 
+    // this.listaProductos
+
     //Primero se valida si existen productos para vender
     if (this.listaProductosParaVenta.length > 0) {
       //Se procederá con la venta
+
+      //     //#-- Recorrer todos los elementos de listadoparaventa (iterar) 15/01/2024 10.29am
+      // for (
+      //   let index = 0;
+      //   index < this.listaProductosParaVenta.length;
+      //   index++
+      // ) {
+      //   const element = this.listaProductosParaVenta[index];
+
+      //   //#-- Si la listaProductos idProducto coincide con un id de listaparaventa 15/01/2024 10.29am
+      //   if (
+      //     this.listaProductos.find((p) => p.idProducto === element.idProducto)
+      //   ) {
+      //     //Se válida si la cantidad de stock es mayor a la cantidad ordenada
+      //     if (this.listaProductos.find((p) => p.stock < element.cantidad)) {
+      //       // const obtIndice = this.listaProductos.indexOf(this.listaProductos)
+
+      //       //#-- Alerta que se muestra si la cantidad es mayor al stock de ese producto
+      //       Swal.fire({
+      //         icon: 'warning',
+      //         title: 'Producto con pocas unidades',
+      //         text: `Solo quedan pocos en stock.`,
+      //         // color: 'skyblue',
+      //       });
+      //     } else {
+
+      //     }
+      //   }
+      // }
 
       //Se bloquea el botón registrar si lo presiona
       this.bloquearBotonRegistrar = true;
@@ -427,6 +468,9 @@ export class VentaComponent implements OnInit {
       //Se va a registrar la venta min 25.12 parte 12
       this._ventaServicio.Registrar(request).subscribe({
         next: (response) => {
+          //#-- Contiene los datos de la venta ParaLaFactura 15/01/2024 11.57am
+          console.log(response.value);
+
           if (response.status) {
             //Si el registro es exitoso procederemos a setear los campos min 26.03 parte 12
             this.totalPagar = 0.0;

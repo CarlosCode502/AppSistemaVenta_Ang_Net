@@ -73,7 +73,7 @@
             mat-cell
             *matCellDef="let element"
             [ngStyle]="
-              element.stock == 0 ? { color: 'red' } : { color: 'blue' }
+              element.stock <= 0 ? { color: 'red' } : { color: 'blue' }
             "
           >
             {{ element.stock }}
