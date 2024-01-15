@@ -124,7 +124,7 @@
 
     <!-- La clase busq contiene un estilo para que el control ocupe el 100% del contenedor -->
     <mat-form-field class="input-filter" appearance="fill">
-      <mat-label>Buscar por número de documento</mat-label>
+      <mat-label>Buscar por:</mat-label>
       <!-- Campo que obtiene un filtro (id es #input del min 28.16 parte 13)-->
       <!--  lo ejecuta con KeyUp al moemto de soltar una tecla -->
       <!-- [disabled]="datosListaVentas.data.length <= 0" para desabilitar si la tabla no tiene datos -->
@@ -224,7 +224,7 @@
 
       <!-- Crear la páginacion de los datos usando paginator min 52.38 parte 13 -->
       <!-- [número de filas por páginacion] botones para regresar o sigiente en la paginacion-->
-      <mat-paginator [pageSizeOptions]="[4, 8, 12]" showFirstLastButtons>
+      <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons>
       </mat-paginator>
     </div>
   </mat-card-content>
