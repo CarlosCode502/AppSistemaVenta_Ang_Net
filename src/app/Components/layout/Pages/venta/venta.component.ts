@@ -377,6 +377,28 @@ export class VentaComponent implements OnInit {
 
   //Método para poder registrar la venta min 23.28 parte 12
   registrarVenta() {
+    //#-- Antes de registrar la venta se verifica si la cantidad de productos no superan el stock 14/01/2024 18.28pm
+
+    // //#-- Todos los productos
+    // let productoYStock: any[] = [];
+    // this.listaProductos.forEach((element) => {
+    //   productoYStock = [element.idProducto, element.stock];
+    // });
+
+    // const pI = productoYStock.map((v) => v.idProducto);
+    // const pS = productoYStock.map((v) => v.stock);
+    // console.log('Producto y Stock');
+    // console.log(pI, pS);
+
+    // //#-- Productos listaparaventa
+    // let productosYCantidad: any[] = [];
+    // this.listaProductosParaVenta.forEach((element2) => {
+    //   productosYCantidad = [element2.idProducto, element2.cantidad];
+    // });
+
+    // console.log('Producto y Cantidad');
+    // console.log(productosYCantidad);
+
     //Primero se valida si existen productos para vender
     if (this.listaProductosParaVenta.length > 0) {
       //Se procederá con la venta
