@@ -11,9 +11,9 @@ table {
 }
 
 #sameLine {
-  /* display: flex; Indica que se usará flexbox */
-  /* justify-content: space-between; Los elementos se moveran a la izquierda y derecha */
-  /* align-items: center; Alineamos de manera vertical */
-  /* padding: 6px; */
   flex: 1 1 auto;
+  /* display: flex; /*Indica que se usará flexbox*/
+  /* justify-content: space-between; Los elementos se moveran a la izquierda y derecha */
+  /* align-items: flex-end; Alineamos de manera vertical */
+  /* padding: 6px; */
 }

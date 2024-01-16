@@ -24,7 +24,9 @@ import { DetalleVenta } from 'src/app/Interfaces/detalle-venta';
 
 //Agregando o utilizando SweetAlert2 (para mostrar alertas personalizadas) min 02.02 parte 12
 import Swal from 'sweetalert2';
-import { elements } from 'chart.js';
+
+//#-- Agregando componente para poder copiar el numero de doc a portapapeles 15/01/2024 19.03pm
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-venta',
@@ -48,6 +50,7 @@ export class VentaComponent implements OnInit {
 
   //El producto seleccionado al momento de una búsqueda se va a guardar aquí temporalmente luego se
   //va a guardar en listaProductosParaVenta
+  //Al principio es nulo por eso (!)
   productoSeleccionado!: Producto;
 
   //Variable tipo de pago por tarjeta o efectivo (Efectivo por defecto)
@@ -95,7 +98,9 @@ export class VentaComponent implements OnInit {
     private fb: FormBuilder,
     private _productoServicio: ProductoService,
     private _ventaServicio: VentaService,
-    private _utilidadService: UtilidadService
+    private _utilidadService: UtilidadService,
+    //#--Agremos un campo dentro del constructor para hacer referencia a Clipboard 15/01/2024 19.06pm
+    private _clipboard: Clipboard
   ) {
     //Campos que va a tener el formulario de productos min 11.20 parte 12
     //Contiene el producto y la cantidad a comprar
@@ -403,11 +408,40 @@ export class VentaComponent implements OnInit {
               this.listaProductosParaVenta
             );
 
+            //#-- Var para almacenar el númeroDocumento 15/01/2024 19.20 pm
+            const textoCopiar = response.value.numeroDocumento;
+            // console.log(textoCopiar);
+            // this.copiarTexto(textoCopiar);
+
+            //#-- Se modifico el contenido de la alerta 15/01/2024 19.39 pm
+            //#-- Para permitir al usuario copiar el número de doc para la venta
             //Finalmente se muestra el msj de registro venta exitoso min 26.09 parte 12
             Swal.fire({
               icon: 'success',
-              title: 'Venta Realizada!',
-              text: `Número de venta: ${response.value.numeroDocumento}`,
+              // title: 'Venta Realizada!',
+              // text: `Número de venta: ${response.value.numeroDocumento}`,
+              //#-- Se puede agregar una estructura html para mostrar contenido
+              html: `<h1>Venta Realizada!</h1>
+              <p>Número de venta: <strong> ${response.value.numeroDocumento} </strong></p>`,
+              //#-- Mostrar y modificar botones
+              showCancelButton: true,
+              confirmButtonText: 'Aceptar',
+              cancelButtonColor: '#2ecc71',
+              cancelButtonText: 'Copiar',
+              //#-- Entonces se válida la opcion elegida 15/01/2024 19.46 pm
+            }).then((r) => {
+              //#-- Si el resultado es distinto (se presiono el btn cancelar)
+              //#-- Si se presiona aceptar solo se cierra la ventana
+              if (!r.value) {
+                //#-- Se ejecuta el método pasandole como parametro el texto a copiar
+                this.copiarTexto(textoCopiar);
+
+                //#-- Se muestra una alerta indicando que se copió el texto
+                this._utilidadService.mostrarAlerta(
+                  'El número de venta se copió en el portapapeles',
+                  'Copiado!'
+                );
+              }
             });
 
             //Para restablecer el formulario min 21.03 parte 12
@@ -423,14 +457,14 @@ export class VentaComponent implements OnInit {
             //#-- Agregado msj 12/01/24 19.32pm
             //Evento que obtiene los productos cuando se realiza una búsqueda por caracter min 14.10 parte
             //Obtener el campo producto cuando cambien los valores (valueChanges)
-            this.formularioProductoVenta
-              .get('producto')
-              ?.valueChanges.subscribe((value) => {
-                // Contendrá la lista de productos que coincidan con el filtro
-                // listaProductoFiltro(Se va a mostrar al usuario para que elija lo que desee)
-                // this.listaProductoFiltro = this.retornarProductosPorFiltro(this.onInit());
-                this.ngOnInit();
-              });
+            // this.formularioProductoVenta
+            //   .get('producto')
+            //   ?.valueChanges.subscribe((value) => {
+            //     // Contendrá la lista de productos que coincidan con el filtro
+            //     // listaProductoFiltro(Se va a mostrar al usuario para que elija lo que desee)
+            //     // this.listaProductoFiltro = this.retornarProductosPorFiltro(this.onInit());
+            //     this.ngOnInit();
+            //   });
           }
           //Si el status no es exitoso
           else {
@@ -449,6 +483,12 @@ export class VentaComponent implements OnInit {
         error: (e) => {},
       });
     }
+  }
+
+  //#-- Se agrego el método copiar texto que recibe como parametro un string con el texto 15/01/2024 19.44
+  copiarTexto(textoACopiar: string) {
+    //#-- Hace uso del componente Clipboar y el método copy recibiendo el texto a copiar
+    this._clipboard.copy(textoACopiar);
   }
 
   //Método para poder eliminar un producto seleccionado en la listaParaVenta min 21.40 parte 12
