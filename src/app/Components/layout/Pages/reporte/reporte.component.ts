@@ -21,7 +21,6 @@ import * as XLSX from 'xlsx';
 import { Reporte } from 'src/app/Interfaces/reporte';
 import { VentaService } from 'src/app/Services/venta.service';
 import { UtilidadService } from 'src/app/Reutilizable/utilidad.service';
-import { formatDate } from '@angular/common';
 
 //Configurando el formato de fecha que se va a utilizar min 02.00 parte 14
 export const MY_DATA_FORMATS = {
@@ -155,6 +154,17 @@ export class ReporteComponent {
           this.listaVentasReporte = data.value;
           //Se actualiza la tabla
           this.dataTableVentaReporte.data = data.value;
+          // console.log(new Date().getDay());
+          // console.log(new Date().getDate());
+          // console.log(new Date().getMonth());
+          // console.log(new Date().getFullYear());
+          // console.log(new Date().getDate());
+          // console.log(new Date().getFullYear());
+          // console.log(new Date().getTime());
+          // console.log(new Date().getTime());
+          // console.log(new Date().getDate());
+          // console.log(new Date().getFullYear());
+          // console.log(new Date().getTime());
         }
         //En caso de no exitoso
         else {
@@ -177,10 +187,10 @@ export class ReporteComponent {
 
   //Método que permitirá exportar un documento de tipo exel min 09.58 parte 14
   exportarExel() {
-    const _fechaInicio = moment(this.formularioFiltro.value.fechaInicio).format(
+    let _fechaInicio = moment(this.formularioFiltro.value.fechaInicio).format(
       'DD/MM/YYYY'
     );
-    const _fechaFin = moment(this.formularioFiltro.value.fechaFin).format(
+    let _fechaFin = moment(this.formularioFiltro.value.fechaFin).format(
       'DD/MM/YYYY'
     );
 
@@ -196,6 +206,11 @@ export class ReporteComponent {
     //Se va a unir el libro con la hoja min 11.09 parte 14
     XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
 
+    // _fechaInicio = _fechaInicio.replace('-', '/');
+    // console.log(_fechaInicio);
+    // _fechaFin = _fechaFin.replace('-', '/');
+    // console.log(_fechaFin);
+
     //Para poder descargar el archivo exel
     XLSX.writeFile(
       wb,
@@ -204,8 +219,9 @@ export class ReporteComponent {
         '-' +
         _fechaFin +
         ') - ' +
-        _HoraActual.toLocaleString() +
+        new Date().toLocaleString() +
         '.xlsx'
     );
+    // console.log(wb, _fechaInicio, _fechaFin, _HoraActual.toLocaleString());
   }
 }
