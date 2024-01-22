@@ -138,7 +138,7 @@ export class ReporteComponent {
         'Debe ingresar ambas fechas',
         'Error!'
       );
-      //Luego se retornara el msj
+      //Luego se retornara el msj que indica que debe verificar las fechas
       return;
     }
 
