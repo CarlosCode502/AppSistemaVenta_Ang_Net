@@ -418,16 +418,21 @@ export class VentaComponent implements OnInit {
             //Finalmente se muestra el msj de registro venta exitoso min 26.09 parte 12
             Swal.fire({
               icon: 'success',
+              //#-- agregar válidacion para que no se pueda cerrar25/01/2024 21.31
               // title: 'Venta Realizada!',
               // text: `Número de venta: ${response.value.numeroDocumento}`,
               //#-- Se puede agregar una estructura html para mostrar contenido
               html: `<h1>Venta Realizada!</h1>
-              <p>Número de venta: <strong> ${response.value.numeroDocumento} </strong></p>`,
+              <p>Número de venta: <strong> ${response.value.numeroDocumento} </strong></p>
+              <button> Imprimir factura </button>`,
               //#-- Mostrar y modificar botones
               showCancelButton: true,
               confirmButtonText: 'Aceptar',
               cancelButtonColor: '#2ecc71',
               cancelButtonText: 'Copiar',
+              //#-- Para evitar que la alerta se cierre cuando se hace click fuera de este 25/01/2024 21.45pm
+              allowOutsideClick: false,
+
               //#-- Entonces se válida la opcion elegida 15/01/2024 19.46 pm
             }).then((r) => {
               //#-- Si el resultado es distinto (se presiono el btn cancelar)
@@ -437,10 +442,10 @@ export class VentaComponent implements OnInit {
                 this.copiarTexto(textoCopiar);
 
                 //#-- Se muestra una alerta indicando que se copió el texto
-                this._utilidadService.mostrarAlerta(
-                  'El número de venta se copió en el portapapeles',
-                  'Copiado!'
-                );
+                // this._utilidadService.mostrarAlerta(
+                //   'El número de venta se copió en el portapapeles',
+                //   'Copiado!'
+                // );
               }
             });
 
