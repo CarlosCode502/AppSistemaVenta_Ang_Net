@@ -211,10 +211,25 @@
 
     <!-- Una sección de 4 columnas de alto de 80px min 53.08 parte 12-->
     <mat-grid-list cols="4" rowHeight="80px">
+      <!-- 3Columnas -->
+      <mat-grid-tile>
+        <button
+          mat-raised-button
+          color="accent"
+          style="width: 70%"
+          [disabled]="
+            listaProductosParaVenta.length < 1 || bloquearBotonRegistrar
+          "
+        >
+          <mat-icon>preview</mat-icon>Factura anterior
+        </button>
+      </mat-grid-tile>
+
       <!-- Para que ocupe un ancho de 2 filas -->
       <!-- No contiene nada -->
-      <!-- 3Columnas -->
-      <mat-grid-tile [colspan]="3"> </mat-grid-tile>
+      <!-- 5ta columna -->
+      <mat-grid-tile [colspan]="2"></mat-grid-tile>
+
       <!-- 4ta columna -->
       <mat-grid-tile>
         <!-- Botón que va a permitir registrar una venta min 54.20 parte 12 aprox -->
@@ -232,7 +247,6 @@
         >
           <mat-icon>new_label</mat-icon>Registrar
         </button>
-        <!-- <button (click)="copiarTexto()">Copiar número de documento</button>` -->
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-content>
