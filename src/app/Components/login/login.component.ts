@@ -96,11 +96,15 @@ export class LoginComponent {
 
             //Caso por defecto
             default:
+              //Se mostrara la alerta
               this._utilidadServicio.mostrarAlerta(
                 'No es posible acceder con este usuario',
                 'Usuario Inactivo!'
               );
+
+              //Elimina la sesión del usuario
               this._utilidadServicio.eliminarSesionUsuario();
+
               break;
           }
         } else {
@@ -109,13 +113,21 @@ export class LoginComponent {
             'Las credenciales no coinciden con un usuario existente',
             'Opss!'
           );
-          // this.mostrarLoading = false;
         }
       },
       //Evento de complete que se ejecuta luego de una solicitud min 26.30 parte 9
       complete: () => {
-        //Indica al mostrarLoading que se debe ocultar
-        this.mostrarLoading = false;
+        //#-- Válida un registro exitoso = true 26/01/2024 14.28pm
+        if (this.estadoSesionUsuario) {
+          //Indica al mostrarLoading que se debe ocultar
+          this.mostrarLoading = false;
+        } else {
+          //Se seguirá mostrando el loading y luego de unos segundos se ocultara;
+          setTimeout(() => {
+            //Indica al mostrarLoading que se debe ocultar
+            this.mostrarLoading = false;
+          }, 3000);
+        }
       },
       //Método de error en caso de que se tenga que retornar alguno min 27.14 parte 9
       error: () => {

@@ -10,7 +10,12 @@
     <h1>Sistema de Venta</h1>
 
     <!-- Botón para ocultar/mostrar el nav (evento clic que apunta al nav de 04.17) -->
-    <button mat-icon-button (click)="sidenav.toggle()">
+    <button
+      mat-icon-button
+      (click)="sidenav.toggle()"
+      style="margin-left: 30px"
+      matTooltip="Ocultar/Mostrar"
+    >
       <mat-icon>menu</mat-icon>
     </button>
 
