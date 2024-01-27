@@ -51,6 +51,9 @@ export const MY_DATA_FORMATS = {
 export class ReporteComponent {
   //Creamos las variables a utilizar 02.41 parte 14
 
+  //#-- Para obtener el importe 26/01/2024 22.27 pm
+  obtenerImporteVar: number = 0;
+
   //Contiene los campos de busqueda
   formularioFiltro: FormGroup;
   //Modelo de la fuente de datos
@@ -111,6 +114,8 @@ export class ReporteComponent {
     //Se usa trim(para eliminar espacios al inicio y fin) además todo el texto sera en minúsculas
     this.dataTableVentaReporte.filter = filterValue.trim().toLocaleLowerCase();
     // this.datosListaVentas.paginator = this.paginacionTabla;
+    //#-- Establece el importe a 0 ya que se requiere un filtro 26/01/2024 22.54pm
+    this.obtenerImporteVar = 0;
   }
 
   //Crear el evento del componente AfterViewInit para la páginacion min 06.17 parte 14
@@ -154,17 +159,9 @@ export class ReporteComponent {
           this.listaVentasReporte = data.value;
           //Se actualiza la tabla
           this.dataTableVentaReporte.data = data.value;
-          // console.log(new Date().getDay());
-          // console.log(new Date().getDate());
-          // console.log(new Date().getMonth());
-          // console.log(new Date().getFullYear());
-          // console.log(new Date().getDate());
-          // console.log(new Date().getFullYear());
-          // console.log(new Date().getTime());
-          // console.log(new Date().getTime());
-          // console.log(new Date().getDate());
-          // console.log(new Date().getFullYear());
-          // console.log(new Date().getTime());
+
+          //#-- 26/01/2024 22.52pm
+          // this.obtenerImporte();
         }
         //En caso de no exitoso
         else {
@@ -223,5 +220,24 @@ export class ReporteComponent {
         '.xlsx'
     );
     // console.log(wb, _fechaInicio, _fechaFin, _HoraActual.toLocaleString());
+  }
+
+  //#-- Permite obtener el Importe total del reporte actual 26/01/2024 22.12pm
+  obtenerImporte() {
+    if (this.obtenerImporteVar > 1) {
+      this.obtenerImporteVar = 0;
+    }
+
+    //FALTA BORRAR AL TENER FILTRO CAMBIAR A TABLA DE FILTRO PARA CALCULAR LOS TOTALES
+
+    for (let index = 0; index < this.listaVentasReporte.length; index++) {
+      const element = this.listaVentasReporte[index];
+
+      console.log(element.total);
+
+      this.obtenerImporteVar =
+        this.obtenerImporteVar + parseFloat(element.total);
+      console.log(this.obtenerImporteVar);
+    }
   }
 }

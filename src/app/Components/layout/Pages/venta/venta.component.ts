@@ -442,10 +442,10 @@ export class VentaComponent implements OnInit {
                 this.copiarTexto(textoCopiar);
 
                 //#-- Se muestra una alerta indicando que se copió el texto
-                // this._utilidadService.mostrarAlerta(
-                //   'El número de venta se copió en el portapapeles',
-                //   'Copiado!'
-                // );
+                this._utilidadService.mostrarAlerta(
+                  'El número de venta se copió en el portapapeles',
+                  'Copiado!'
+                );
               }
             });
 

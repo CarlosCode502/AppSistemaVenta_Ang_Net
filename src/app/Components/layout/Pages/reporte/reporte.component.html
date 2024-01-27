@@ -77,9 +77,11 @@
     <!-- Si no hay ordenes encontradas no hay necesidad de exportar por lo que no es necesario estar activo -->
     <button
       mat-raised-button
-      color="warn"
       [disabled]="listaVentasReporte.length < 1"
       (click)="exportarExel()"
+      [ngStyle]="
+        listaVentasReporte.length > 1 ? { color: 'green' } : { color: '' }
+      "
     >
       <mat-icon>feed</mat-icon>Exportar .Xlsx
     </button>
@@ -210,6 +212,28 @@
           </td>
         </tr>
       </table>
+
+      <mat-divider></mat-divider>
+
+      <!-- Una sección de 4 columnas de alto de 80px min 53.08 parte 12-->
+      <mat-grid-list cols="4" rowHeight="80px">
+        <!-- Para que ocupe un ancho de 2 filas -->
+        <!-- No contiene nada -->
+        <!-- 5ta columna -->
+        <mat-grid-tile [colspan]="3"></mat-grid-tile>
+
+        <!-- 4ta columna -->
+        <mat-grid-tile>
+          <button
+            mat-raised-button
+            color="#auto"
+            style="width: 70%"
+            (click)="obtenerImporte()"
+          >
+            Importe Total: Q {{ obtenerImporteVar.toFixed(2) }}
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
 
       <mat-divider></mat-divider>
 
