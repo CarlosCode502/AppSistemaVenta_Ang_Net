@@ -17,11 +17,28 @@ mat-form-field {
   margin-right: 50px;
 }
 
+/* Para la tabla */
 table {
   width: 100%;
 }
 
+/* Diseño para el campo de filtro */
 .input-filter {
   width: 100%;
   font-size: 14px;
+}
+
+/* Formato para el elemento de ayuda o descripcion "?" */
+.msj-de-ayuda {
+  border-radius: 100%;
+  padding: 3px 6px 3px 6px;
+  background-color: #3f51b5;
+  color: white;
+  cursor: pointer;
+}
+
+/* Formato para tooltip */
+.d {
+  text-align: justify;
+  text-wrap: wrap;
 }

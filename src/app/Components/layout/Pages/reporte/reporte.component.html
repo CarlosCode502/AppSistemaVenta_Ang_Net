@@ -92,7 +92,9 @@
       appearance="fill"
       style="margin-top: 15px"
     >
-      <mat-label>Búscar por número de documento:</mat-label>
+      <mat-label
+        >Búscar por: (Nombre | Fecha | Núm venta | Producto | Tipo pago )
+      </mat-label>
       <!-- Campo que obtiene un filtro (id es #input)-->
       <!--  lo ejecuta con KeyUp al moemto de soltar una tecla -->
       <input matInput (keyup)="aplicarFiltroTabla($event)" #input />
@@ -106,7 +108,16 @@
         <!--{{element}} corresponde a la Interfaz .ts-->
         <ng-container matColumnDef="numeroVenta">
           <!-- Encabezado de esta columna -->
-          <th mat-header-cell *matHeaderCellDef>Número de Venta</th>
+          <th mat-header-cell *matHeaderCellDef>
+            Número de Venta
+            <b
+              class="msj-de-ayuda"
+              matTooltip="Mismo número de venta indica que pertenece a la misma factura."
+            >
+              ?</b
+            >
+          </th>
+
           <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
           <!-- Mismo nombre que matColumnDef -->
           <td mat-cell *matCellDef="let element">
@@ -142,7 +153,15 @@
         <!--{{element}} corresponde a la Interfaz .ts-->
         <ng-container matColumnDef="total">
           <!-- Encabezado de esta columna -->
-          <th mat-header-cell *matHeaderCellDef>Total neto</th>
+          <th mat-header-cell *matHeaderCellDef>
+            Total neto
+            <b
+              class="msj-de-ayuda"
+              matTooltip="Representa el total por factura, esta relacionado con (Número de venta)."
+            >
+              ?</b
+            >
+          </th>
           <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
           <!-- Mismo nombre que matColumnDef -->
           <td mat-cell *matCellDef="let element">Q {{ element.totalVenta }}</td>
@@ -188,7 +207,15 @@
         <!--{{element}} corresponde a la Interfaz .ts-->
         <ng-container matColumnDef="totalProducto">
           <!-- Encabezado de esta columna -->
-          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <th mat-header-cell *matHeaderCellDef>
+            Total
+            <b
+              class="msj-de-ayuda"
+              matTooltip="Se obtiene múltiplicando Cantidad * Precio."
+            >
+              ?</b
+            >
+          </th>
           <!-- Element representa un elemento de nuestra lista y mostramos su posicion -->
           <!-- Mismo nombre que matColumnDef -->
           <td mat-cell *matCellDef="let element">
@@ -229,6 +256,7 @@
             color="#auto"
             style="width: 70%"
             (click)="obtenerImporte()"
+            [disabled]="listaVentasReporte.length < 1"
           >
             Importe Total: Q {{ obtenerImporteVar.toFixed(2) }}
           </button>
