@@ -51,13 +51,6 @@ export class LoginComponent {
 
   //Crear un método que permite iniciar sesion min 22.54 parte 9
   iniciarSesion() {
-    //Se va a ejecutar cuando el usuario haga click en el btn ingresar
-    //Se muestra la animación de carga
-    this.mostrarLoading = true;
-
-    //#--verificamos que los datos del usuario no correspondan al de la sesion
-    // const usuarioSesion = this._utilidadServicio.obtenerSesionUsuario();
-
     //Modelo que se va a enviar a la api para la validación del login min 23.30 parte 9
     const request: Login = {
       //Recibe un correo del campo email (propiedad del modelo o comp login.ts (Interfaces))
@@ -67,13 +60,15 @@ export class LoginComponent {
       //#-- Recibe el estado activo o inactivo
     };
 
+    //Se va a ejecutar cuando el usuario haga click en el btn ingresar
+    //Se muestra la animación de carga
+    this.mostrarLoading = true;
+
     //Ejecuta este método iniciar con un rq (es necesario subscribirse para obtener la resp)
     this._usuarioServicio.IniciarSesion(request).subscribe({
       //Devuelve la respuesta en caso de ser exitoso o no
       next: (data) => {
         //Si la respuesta es true (ha encontrado un usuario con esas credenciales)
-        // console.log(data);
-
         if (data.status) {
           //status = true
           //Si existe un usuario se ejecuta el método y se guardan las credenciales en memoria del nav
@@ -84,8 +79,6 @@ export class LoginComponent {
 
           //Obtiene el estado del usuario logeado
           this.estadoSesionUsuario = _sesionUsuario.esActivo;
-
-          // console.log(this.estadoSesionUsuario);
 
           //Obtiene y verifica si existe una opción según el estado
           switch (this.estadoSesionUsuario) {
@@ -99,40 +92,52 @@ export class LoginComponent {
               //Se mostrara la alerta
               this._utilidadServicio.mostrarAlerta(
                 'No es posible acceder con este usuario',
-                'Usuario Inactivo!'
+                'Usuario inactivo!'
               );
 
               //Elimina la sesión del usuario
               this._utilidadServicio.eliminarSesionUsuario();
-
               break;
           }
         } else {
-          //Si no existe el usuario (se muestra una alerta de error
+          //Si no existe el usuario (se muestra una alerta de error)
           this._utilidadServicio.mostrarAlerta(
             'Las credenciales no coinciden con un usuario existente',
-            'Opss!'
+            'Atención!'
           );
         }
       },
       //Evento de complete que se ejecuta luego de una solicitud min 26.30 parte 9
       complete: () => {
-        //#-- Válida un registro exitoso = true 26/01/2024 14.28pm
-        if (this.estadoSesionUsuario) {
-          //Indica al mostrarLoading que se debe ocultar
-          this.mostrarLoading = false;
-        } else {
-          //Se seguirá mostrando el loading y luego de unos segundos se ocultara;
-          setTimeout(() => {
-            //Indica al mostrarLoading que se debe ocultar
-            this.mostrarLoading = false;
-          }, 3000);
-        }
+        //Se ejecuta para válidar si el inicio fue exitoso.
+        this.validarSesionUsuario();
       },
       //Método de error en caso de que se tenga que retornar alguno min 27.14 parte 9
       error: () => {
-        this._utilidadServicio.mostrarAlerta('Ocurrio un error', 'Opss!');
+        //Se ejecuta el método
+        this.validarSesionUsuario();
+
+        //Se muestra un msj de error
+        this._utilidadServicio.mostrarAlerta(
+          'Ocurrio un problema inesperado, contacte a soporte.',
+          'Error!'
+        );
       },
     });
+  }
+
+  //#-- Válida la sesión del usuario (si fue exitosa o no) 29/01/2024 17.15pm
+  validarSesionUsuario() {
+    //#-- Válida un registro exitoso = true 26/01/2024 14.28pm
+    if (this.estadoSesionUsuario) {
+      //Indica al mostrarLoading que se debe ocultar
+      this.mostrarLoading = false;
+    } else {
+      //Se seguirá mostrando el loading y luego de unos segundos se ocultara;
+      setTimeout(() => {
+        //Indica al mostrarLoading que se debe ocultar
+        this.mostrarLoading = false;
+      }, 6000);
+    }
   }
 }
