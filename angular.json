@@ -78,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "AppSistemaVenta_Ang_Net:build"
+            "buildTarget": "AppSistemaVenta_Ang_Net:build"
           }
         },
         "test": {
