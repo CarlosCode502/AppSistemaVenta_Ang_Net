@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "AppSistemaVenta_Ang_Net:build:production"
+              "buildTarget": "AppSistemaVenta_Ang_Net:build:production"
             },
             "development": {
-              "browserTarget": "AppSistemaVenta_Ang_Net:build:development"
+              "buildTarget": "AppSistemaVenta_Ang_Net:build:development"
             }
           },
           "defaultConfiguration": "development"
