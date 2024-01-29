@@ -15,6 +15,8 @@ export class UtilidadService {
   //Inyectar la referencia de las alertas de matsnackbar
   constructor(private _snackBar: MatSnackBar) {}
 
+  //#-- Método para cerrar la sesión del usuario por inactividad 28/01/2024 19. pm
+
   //Método que devuelve un msj de alerta (recibe parametros) min 14.52 parte 9
   mostrarAlerta(mensaje: string, tipo: string) {
     //Abre un acceso al componente
@@ -24,7 +26,7 @@ export class UtilidadService {
       //De manera vertical al inicio
       verticalPosition: 'bottom',
       //Se va mostrar durante 3s
-      duration: 4000,
+      duration: 6000,
     });
   }
 

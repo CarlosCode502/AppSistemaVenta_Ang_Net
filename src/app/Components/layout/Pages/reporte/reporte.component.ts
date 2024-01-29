@@ -52,9 +52,12 @@ export class ReporteComponent {
   //Creamos las variables a utilizar 02.41 parte 14
   //#-- Para obtener el importe 26/01/2024 22.27 pm
   obtenerImporteVar: number = 0;
-
   //#-- Se cambio el valor para detectar si existe un filtro 27/01/2024 16.02 pm
   filterValue: string = '';
+
+  //#-- Variables para obtener las fechas 28/01/2024 19.22pm
+  _fechaInicio: string = '';
+  _fechaFin: string = '';
 
   //Contiene los campos de busqueda
   formularioFiltro: FormGroup;
@@ -117,12 +120,9 @@ export class ReporteComponent {
     this.dataTableVentaReporte.filter = this.filterValue.trim();
     //No devolvia el producto ni tipo pago ya que hacia un to lower a los textos
     // .toLocaleLowerCase();
-    // this.datosListaVentas.paginator = this.paginacionTabla;
 
     //#-- Establece el importe a 0 ya que se requiere un filtro 26/01/2024 22.54pm
     this.obtenerImporteVar = 0;
-
-    // console.log(this.dataTableVentaReporte.filter);
   }
 
   //Crear el evento del componente AfterViewInit para la páginacion min 06.17 parte 14
@@ -133,20 +133,15 @@ export class ReporteComponent {
 
   //Método para poder realizar la búsqueda segun un rango especifico min 06.32 parte 14
   buscarVentasReporte() {
-    //#-- Limpiar el área de filtro 27/01/2024 19.32pm
-
-    //Utilizando moment para convertir a fecha con formato
-    //Primero se obtiene el valor luego se encapsula con moment
-    const _fechaInicio = moment(this.formularioFiltro.value.fechaInicio).format(
-      'DD/MM/YYYY'
-    );
-    const _fechaFin = moment(this.formularioFiltro.value.fechaFin).format(
-      'DD/MM/YYYY'
-    );
+    //#-- Ejecutamos el método para obtener fechas 28/01/2024 19.31pm
+    this.obtenerFechas();
 
     //Validar si las fechas recibidas son válidas min 07.39 parte 14
     //Si fecha inicio o fecha fin son invalidas
-    if (_fechaInicio === 'Invalid date' || _fechaFin === 'Invalid date') {
+    if (
+      this._fechaInicio === 'Invalid date' ||
+      this._fechaFin === 'Invalid date'
+    ) {
       //Mostrará una alerta para que verifique las fechas si estan completas o correctas min 31.46 parte 13
       this._utilidadService.mostrarAlerta(
         'Debe ingresar ambas fechas',
@@ -157,7 +152,7 @@ export class ReporteComponent {
     }
 
     //Ejecutar el servicio para obtener el reporte por rango de fechas min 07.48 parte 14
-    this._ventaService.Reporte(_fechaInicio, _fechaFin).subscribe({
+    this._ventaService.Reporte(this._fechaInicio, this._fechaFin).subscribe({
       //Se valida por medio de una op flecha
       next: (data) => {
         //Se valida el estatus si es true
@@ -180,13 +175,17 @@ export class ReporteComponent {
           this.listaVentasReporte = [];
           //Se borran los datos de la tabla
           this.dataTableVentaReporte.data = [];
+
+          this.obtenerImporteVar = 0;
+          console.log('Se borraron las tablas');
+
           //Se muestra un msj de error
           this._utilidadService.mostrarAlerta(
             'No se encontraron datos',
             'Opss!'
           );
 
-          console.log('Entro al else');
+          console.log('Se muestra el msj');
         }
       },
       error: (e) => {
@@ -208,11 +207,6 @@ export class ReporteComponent {
 
     //#-- Si no se ha ingresado algun filtro 26/01/2020 16.30pm
     if (this.filterValue == '') {
-      // console.log(
-      //   'Elementos de listaVentasReporte dentro del método obtenerImporte()'
-      // );
-      // console.log(this.listaVentasReporte);
-
       //#-- Se hace una iteración por la longitud de listaVentasReporte
       for (
         let indexLVR = 0;
@@ -228,64 +222,39 @@ export class ReporteComponent {
       }
     } else {
       //Obtener el listado devuelto por el filtro
-      // console.log('\n');
-      // console.log('Listado de ventas reporte (Sino)');
-      // console.log(this.listaVentasReporte);
-      // console.log('\n');
-      // console.log('Elementos de datatable (Sino)');
-      // console.log(this.dataTableVentaReporte.data);
-      // console.log('\n');
-      // console.log('Listado de ventas reporte (Sino) con filtro');
-      // console.log(this.listaVentasReporte);
-
-      //#-- Solo devuelve el filtro
-      // console.log('\n');
-      // console.log('Elementos de datatable (Sino) con filtro');
-      // console.log((this.dataTableVentaReporte.filter = this.filterValue));
-
-      // console.log('\n');
-      // console.log('Elementos de datatable (Sino) con filtro');
-      // console.log((this.dataTableVentaReporte.filter = this.filterValue));
-
-      // console.log('Valor de la tabla luego del filtro');
-      // console.log(
-
       const lstVR = this.listaVentasReporte.filter(
         (x) =>
           x.fechaRegistro === this.dataTableVentaReporte.filter ||
           x.numeroDocumento === this.dataTableVentaReporte.filter ||
           x.tipoPago === this.dataTableVentaReporte.filter ||
           x.producto === this.dataTableVentaReporte.filter
-        // x.cantidad.toString() === this.dataTableVentaReporte.filter ||
-        // x.precio.toString() === this.dataTableVentaReporte.filter ||
-
-        // x.total.toString() === this.dataTableVentaReporte.filter ||
-        // x.totalVenta.toString() === this.dataTableVentaReporte.filter
       );
 
-      console.log(this.dataTableVentaReporte.filter);
-      // const lstVR = this.listaVentasReporte.
+      //#-- Para válidar si el filtro se ingreso correctamente o coincide con una búsqueda  28/01/2024 19.08pm
+      if (lstVR.length < 1) {
+        this._utilidadService.mostrarAlerta(
+          'El filtro debe coincidir con el elemento a buscar.',
+          'Ateción!'
+        );
+      }
 
+      //#-- Se realiza una iteración por cada elemento dentro de lstVR (nuevo listado por el filtro) 28/01/2024 19.10pm
       for (let index = 0; index < lstVR.length; index++) {
         const element = lstVR[index];
 
+        //Se obtiene el importe sumando el total de todos los elementos dentro de lstVr
         this.obtenerImporteVar =
           this.obtenerImporteVar + parseFloat(element.total);
       }
-
-      // );
     }
   }
 
   //Método que permitirá exportar un documento de tipo exel min 09.58 parte 14
   exportarExel() {
-    let _fechaInicio = moment(this.formularioFiltro.value.fechaInicio).format(
-      'DD/MM/YYYY'
-    );
-    let _fechaFin = moment(this.formularioFiltro.value.fechaFin).format(
-      'DD/MM/YYYY'
-    );
+    //#-- Ejecutamos el método para obtener fechas 28/01/2024 19.31pm
+    this.obtenerFechas();
 
+    //Obtiene la hora actual del sistema
     const _HoraActual = new Date();
 
     //(libro)contiene la def para un nuevo libro de exel
@@ -307,9 +276,9 @@ export class ReporteComponent {
     XLSX.writeFile(
       wb,
       'ReporteVentas (' +
-        _fechaInicio +
+        this._fechaInicio +
         '-' +
-        _fechaFin +
+        this._fechaFin +
         ') - ' +
         new Date().toLocaleString() +
         '.xlsx'
@@ -317,11 +286,15 @@ export class ReporteComponent {
     // console.log(wb, _fechaInicio, _fechaFin, _HoraActual.toLocaleString());
   }
 
-  limpiarCampos() {
-    this.filterValue = '';
-
-    this.listaVentasReporte = [];
-
-    this.dataTableVentaReporte.data = [];
+  //#-- Método para poder obtener las fechas 28/01/2024 19.24pm
+  obtenerFechas() {
+    //Utilizando moment para convertir a fecha con formato
+    //Primero se obtiene el valor luego se encapsula con moment
+    this._fechaInicio = moment(this.formularioFiltro.value.fechaInicio).format(
+      'DD/MM/YYYY'
+    );
+    this._fechaFin = moment(this.formularioFiltro.value.fechaFin).format(
+      'DD/MM/YYYY'
+    );
   }
 }
