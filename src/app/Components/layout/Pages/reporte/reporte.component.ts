@@ -105,8 +105,8 @@ export class ReporteComponent {
     this.formularioFiltro = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
       //Campos que son requeridos
-      fechaInicio: ['2024-01-26T00:00:00-06:00', Validators.required],
-      fechaFin: ['2024-01-27T00:00:00-06:00', Validators.required],
+      fechaInicio: ['', Validators.required],
+      fechaFin: ['', Validators.required],
     });
   }
 
@@ -155,19 +155,25 @@ export class ReporteComponent {
     this._ventaService.Reporte(this._fechaInicio, this._fechaFin).subscribe({
       //Se valida por medio de una op flecha
       next: (data) => {
+        //Importe = 0
+        this.obtenerImporteVar = 0;
+
         //Se valida el estatus si es true
         if (data.status) {
-          //--VERIFICAR PORQUE UNO NO TIENE EL .DATA ---
+          //#-- Verifica si el valor el menor a 1 procede a mostrar un msj 29/01/2024 17.46pm
+          if (data.value < 1) {
+            //Se muestra un msj de error
+            this._utilidadService.mostrarAlerta(
+              'No se encontrarón datos dentro del rango especificado.',
+              ''
+            );
+          }
 
           //Se actualiza los datos de ventareportes
           this.listaVentasReporte = data.value;
-          // console.log('Listado de ventas reporte');
-          // console.log(this.listaVentasReporte);
 
           //Se actualiza la tabla
           this.dataTableVentaReporte.data = data.value;
-          // console.log('Elementos de datatable');
-          // console.log(this.dataTableVentaReporte.data);
         }
         //En caso de no exitoso
         else {
@@ -176,16 +182,14 @@ export class ReporteComponent {
           //Se borran los datos de la tabla
           this.dataTableVentaReporte.data = [];
 
+          //Importe = 0
           this.obtenerImporteVar = 0;
-          console.log('Se borraron las tablas');
 
           //Se muestra un msj de error
           this._utilidadService.mostrarAlerta(
             'No se encontraron datos',
             'Opss!'
           );
-
-          console.log('Se muestra el msj');
         }
       },
       error: (e) => {

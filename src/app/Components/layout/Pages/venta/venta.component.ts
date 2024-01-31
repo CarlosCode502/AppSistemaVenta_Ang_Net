@@ -180,9 +180,10 @@ export class VentaComponent implements OnInit {
         'Error!'
       );
     } else {
+      //OBTENEMOS TODOS LOS VALORES DEL PRODUCTO
+      //#--Es porque existe un prod seleccionado (obtenemos los valores ingresados) 29/01/2024 19.43 pm
       //#-- Contiene el id del producto seleccionado 14/01/2024 15.51
       let _idProducto: number = this.productoSeleccionado.idProducto;
-
       //#-- Obtenemos los datos del producto seleccionado 08/01/2024
       //Representa al valor del campo cantidad del formularioProducto venta en (min 06.35 parte 12)
       let _cantidad: number = this.formularioProductoVenta.value.cantidad;
@@ -193,8 +194,8 @@ export class VentaComponent implements OnInit {
       //Contiene el total de todos los productos
       this.totalPagar = this.totalPagar + _total;
 
-      //#-- Válida si el total a pagar es menor o igual que cero 14/01/2024 18.05 pm
-      //#-- En caso de que el usuario agregué números negativos o cero
+      //VERIFICAMOS SI EL TOTAL A PAGAR ES NEGATIVO O 0 PARA FORMATEAR LOS CAMPOS
+      //SE UTILIZA CUANDO LA CANTIDAD DEL PRODUCTO ES NEGATIVA (NO SE PUEDE NEGAR YA QUE PUEDE QUE DESEE QUITAR)
       if (this.totalPagar <= 0) {
         //#-- Se va a bloquear el btn registrar venta
         this.bloquearBotonRegistrar = true;
@@ -202,24 +203,35 @@ export class VentaComponent implements OnInit {
         this.totalPagar = 0;
         //#-- El liistado de productos se reseteara (Al llegar el total a 0 se queda el prod) pero se bloquea el reg
         this.listaProductosParaVenta = [];
-      } else {
-        //#-- En caso de que el total sea mayor a 0 se habilita el btn registrar 14/01/2024
-        //#-- Y se ejecutan todas las válidaciones
-        this.bloquearBotonRegistrar = false;
+        this.datosDetalleVenta.data = [];
+        // this.datosDetalleVenta.data = this.datosDetalleVenta.data.filter(x => x.idProducto = )
 
+        // let prod: DetalleVenta = {
+        //   idProducto: _idProducto,
+        //   descripcionProducto: this.productoSeleccionado.nombreProducto,
+        //   cantidad: _cantidad,
+        //   precioTexto: _precio.toFixed(2),
+        //   totalTexto: _total.toFixed(2),
+        // };
+
+        // this.eliminarProducto(prod);
+      } else {
+        //VERIFICA QUE LA CANTIDAD INGRESADA NO SEA MAYOR A LA DE STOCK
         //#-- Al agregar el producto se válida si la cantidad es mayor al stock dispon
-        // //#-- Valida si la cantidad del producto seleccionado no es mayor al stock actual 07/01/2024 18.57 pm
-        // //#-- Si la cantidad es menor al producto en stock se seguíra con la venta 07/01/2024 18.57 pm
+        //#-- Valida si la cantidad del producto seleccionado no es mayor al stock actual 07/01/2024 18.57 pm
+        //#-- Si la cantidad es menor al producto en stock se seguíra con la venta 07/01/2024 18.57 pm
         if (_cantidad <= this.productoSeleccionado.stock) {
-          //#-- Falta válidar si un id dentro del listado es igual al de prod selec 14/01/2024 16.55
-          //#-- Devuelve true si el producto seleccionado se encuentra en la listaproductosparaventa
+          //#-- Se desbloquea el btn registrar 14/01/2024
+          this.bloquearBotonRegistrar = false;
+
+          //SE VERIFICA SI EL PRODUCTO YA EXISTE EN EL LISTADO PARA VENDER
+          //#-- Devuelve true si el producto seleccionado se encuentra en la listaproductosparaventa  14/01/2024 16.55
           if (
             this.listaProductosParaVenta.find(
               (p) => p.idProducto === this.productoSeleccionado.idProducto
             )
           ) {
-            //#-- Recorre el array de objetos y a través de una validación 14/01/2024 15.51 pm
-            //#-- se cambian las propiedades de los elementos exitentes en listaproductosparaventa
+            //#-- Recorre los elementos del array y a través de una validación cambia el valor 14/01/2024 15.51 pm
             this.listaProductosParaVenta.map(function (dato) {
               //#-- Si el id del producto que se encuentra en el listado es igual al del producto seleccionado
               //Para agregarlo
@@ -234,9 +246,6 @@ export class VentaComponent implements OnInit {
               //#-- Se retorna el nuevo listado (se sobrescribe)
               return dato;
             });
-
-            // console.log('2');
-            // console.log(this.listaProductosParaVenta);
           }
           //#-- En caso de que el id no coincida con uno exitente es porque se va a agregar un nuevo producto
           else {
@@ -257,12 +266,12 @@ export class VentaComponent implements OnInit {
             this.listaProductosParaVenta
           );
 
+          //AQUI HACE EL DESCUENTO EN TIEMPO REAL DEL STOCK
           //#-- Itera cada uno de los elementos del arreglo 15/01/2024 12.18pm
           //#-- Como ya se válido que la cantidad ingresada no es menor al stock existente
           //#-- Luego se sobrescribe el arreglo y se resta la cantidad ingresada
           this.listaProductoFiltro.map(function (data) {
             data.stock = data.stock - _cantidad;
-
             return data;
           });
 
@@ -276,6 +285,7 @@ export class VentaComponent implements OnInit {
           //#--Si se elimina se muestra seleccionado luego de unos seg se resetea 12/01/24 19.32pm
           // this.listaProductoFiltro = [];
         }
+        //SI LA CANTIDAD INGRESADA ES MAYOR AL STOCK
         //#-- Si cantidad ingresada es mayor al stock del producto se muestra un msj de alerta 07/01/2024
         else {
           if (this.productoSeleccionado.stock === 0) {
@@ -296,6 +306,9 @@ export class VentaComponent implements OnInit {
             });
           }
 
+          //SI LA CANTIDAD DEL PRODUCTO INGRESADO ES MAYOR A LA DE STOCK (SE AGREGAN LOS DATOS DEL PROD)
+          //PARA EVITAR ESO SE AGREGA LA SIG VALIDACION
+          //SI YA NO EXISTE NINGUN PRODUCTO SE FORMATEAN LOS CAMPORS
           //#-- Verificamos si no existe algun otro producto en el listado paraventa 08/01/2024 09.30pm
           if (this.listaProductosParaVenta.length < 0) {
             //#-- Restablecemos el valor de los campos
@@ -304,6 +317,7 @@ export class VentaComponent implements OnInit {
             _total = 0;
             this.totalPagar = 0;
           }
+          //SI EXISTEN MÁS PRODUCTOS ÚNICAMENTE SE HACE EL DESCUENTO A TOTAL A PAGAR - PRECIO DEL PRODUCTO * CANTIDAD
           //#Sino solo se resta el total de productos a pagar
           else {
             this.totalPagar = this.totalPagar - _total;
@@ -343,6 +357,24 @@ export class VentaComponent implements OnInit {
     if (this.listaProductosParaVenta.length > 0) {
       //Se procederá con la venta
 
+      //PARA VALIDAR QUE NINGUN PRODUCTO VACIO SE GUARDE EN EL LISTADO
+
+      for (
+        let index = 0;
+        index < this.listaProductosParaVenta.length;
+        index++
+      ) {
+        const element = this.listaProductosParaVenta[index];
+
+        if (element.cantidad == 0) {
+          let obIdProd = element.idProducto;
+
+          this.listaProductosParaVenta = this.listaProductosParaVenta.filter(
+            (x) => x.idProducto != obIdProd
+          );
+        }
+      }
+
       //     //#-- Recorrer todos los elementos de listadoparaventa (iterar) 15/01/2024 10.29am
       // for (
       //   let index = 0;
@@ -371,6 +403,8 @@ export class VentaComponent implements OnInit {
       //     }
       //   }
       // }
+
+      console.log(this.listaProductosParaVenta);
 
       //Se bloquea el botón registrar si lo presiona
       this.bloquearBotonRegistrar = true;

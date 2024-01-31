@@ -27,12 +27,14 @@
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Producto</mat-label>
             <!-- Recibe el filtro para la búsqueda -->
+            <!-- //# Se agregó un evento que selecciona el texto actual al hacer un clic en el input 30/01/2024 19.55 pm -->
             <input
               matInput
               type="text"
               placeholder="Buscar por ..."
               [matAutocomplete]="auto"
               formControlName="producto"
+              onclick="this.select()"
             />
             <!-- Obtenga ka primera opcion del input al que se hace referencia -->
             <!-- optionSelect recibe el método de los productos para venta -->
