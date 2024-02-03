@@ -3,7 +3,12 @@
 //ViewChild permite crear una instancia de algun componente de nuestro html
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 //Trabajar con los fórmularios reactivos min 16.10 parte 13
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 //Para poder trabajar con tablas
 import { MatTableDataSource } from '@angular/material/table';
 //Para la páginación de nuestra tabla
@@ -25,6 +30,9 @@ import { VentaService } from 'src/app/Services/venta.service';
 //Para mostrar las alertas
 import { UtilidadService } from 'src/app/Reutilizable/utilidad.service';
 
+//#-- Para poder usar los checkbox 30/01/2024 21.55pm
+// import { MatCheckboxModule } from '@angular/material/checkbox';
+
 //Configurando el formato de fecha que se va a utilizar min 17.42 parte 13
 export const MY_DATA_FORMATS = {
   //Parseo de fecha de entrada 'Dia/Mes/Año'
@@ -43,6 +51,9 @@ export const MY_DATA_FORMATS = {
   selector: 'app-historial-venta',
   templateUrl: './historial-venta.component.html',
   styleUrls: ['./historial-venta.component.css'],
+  //#-- Importamos el checbox 30/01/2024 22.03pm
+  // standalone: true,
+  // imports: [MatCheckboxModule, FormsModule],
   //Agregamos a este componente un proveedor para servicio de fecha min 19.26 parte 13
   providers: [
     {
@@ -61,7 +72,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
   //Antes 29/12/2023
   opcionesBusqueda: any[] = [
     { value: 'fecha', descripcion: 'Rango de Fechas' },
-    { value: 'numero', descripcion: 'Número de Documento' },
+    { value: 'numero', descripcion: 'Número de Venta' },
   ];
 
   //Columnas que va a tener la tabla min 22.19 parte 13
@@ -96,7 +107,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
     this.formularioBusqueda = this.fb.group({
       //Si este campo se mantiene en fecha se búscara por fecha
       //SI cambia a por numero se búscara por número
-      buscarPor: ['fecha'],
+      buscarPor: ['numero'],
       numeroVenta: [''],
       fechaInicio: [''],
       fechaFin: [''],
@@ -176,7 +187,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
 
       if (_numero === '' || _numero.length === 0 || _numero === null) {
         this._utilidadService.mostrarAlerta(
-          'Debe ingresar un número de Documento',
+          'Debe ingresar un número de venta.',
           'Error!'
         );
         return;
@@ -203,7 +214,7 @@ export class HistorialVentaComponent implements OnInit, AfterViewInit {
             if (data.value == 0) {
               this._utilidadService.mostrarAlerta(
                 'No se encontraron datos por el rango especificado',
-                'Opss!'
+                ''
               );
 
               this.datosListaVentas.data = [];

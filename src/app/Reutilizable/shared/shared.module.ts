@@ -51,17 +51,17 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 //Permite cambiar el formato de fechas
 import { MomentDateModule } from '@angular/material-moment-adapter';
-//Fin de agregar los componentes min 09.00 parte 8 
+//Fin de agregar los componentes min 09.00 parte 8
+
+// import { MatCheckbox } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule
-  ],
-  exports:[
+  imports: [CommonModule],
+  exports: [
     //Importando todos los componentes declarados min 09.41 parte 8
     CommonModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     MatCardModule,
@@ -84,14 +84,10 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MomentDateModule
+    MomentDateModule,
+    // MatCheckbox,
   ],
   //Especificando 2 modulos en especial min 11.08 parte 8
-  providers:[
-    MatDatepickerModule,
-    MatNativeDateModule
-  ]
+  providers: [MatDatepickerModule, MatNativeDateModule],
 })
-export class SharedModule {
-
- }
+export class SharedModule {}
